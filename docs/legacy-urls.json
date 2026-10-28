@@ -1,0 +1,110 @@
+[
+  {
+    "path": "/sem-categoria/ola-mundo/",
+    "group": "post"
+  },
+  {
+    "path": "/dicas/como-fazer-um-diagnostico-de-site/",
+    "group": "post"
+  },
+  {
+    "path": "/html/corrigindo-acentos-que-nao-aparecem-nas-paginas-html/",
+    "group": "post"
+  },
+  {
+    "path": "/html/para-que-serve-o-atributo-lang-e-porque-voce-deve-comecar-a-usa-lo/",
+    "group": "post"
+  },
+  {
+    "path": "/tutoriais/o-que-e-o-google-search-console-e-como-verificar-a-propriedade-do-seu-site/",
+    "group": "post"
+  },
+  {
+    "path": "/wordpress/5-motivos-para-escolher-o-wordpress-como-seu-cms-preferido/",
+    "group": "post"
+  },
+  {
+    "path": "/dicas/como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display/",
+    "group": "post"
+  },
+  {
+    "path": "/desenvolvimento-web/como-funciona-a-internet/",
+    "group": "post"
+  },
+  {
+    "path": "/dicas/como-criar-um-site-gratis-as-8-melhores-plataformas-para-impulsionar-seu-projeto-sem-gastar-nada/",
+    "group": "post"
+  },
+  {
+    "path": "/",
+    "group": "page"
+  },
+  {
+    "path": "/sobre/",
+    "group": "page"
+  },
+  {
+    "path": "/portfolio-de-sites/",
+    "group": "page"
+  },
+  {
+    "path": "/politica-de-privacidade/",
+    "group": "page"
+  },
+  {
+    "path": "/lp/",
+    "group": "page"
+  },
+  {
+    "path": "/portfolio/sob-as-asas-do-segredo-blog-e-landing-page/",
+    "group": "portfolio"
+  },
+  {
+    "path": "/categoria/css/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/desenvolvimento-web/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/dicas/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/html/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/sem-categoria/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/tutoriais/",
+    "group": "category"
+  },
+  {
+    "path": "/categoria/wordpress/",
+    "group": "category"
+  },
+  {
+    "path": "/assunto/atributos/",
+    "group": "post_tag"
+  },
+  {
+    "path": "/assunto/erros-e-bugs/",
+    "group": "post_tag"
+  },
+  {
+    "path": "/assunto/ferramentas/",
+    "group": "post_tag"
+  },
+  {
+    "path": "/assunto/linguagem/",
+    "group": "post_tag"
+  },
+  {
+    "path": "/assunto/search-console/",
+    "group": "post_tag"
+  }
+]

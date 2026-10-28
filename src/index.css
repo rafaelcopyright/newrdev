@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +9,7 @@
   --border: #2a3441;
   --text: #e6edf3;
   --text-muted: #8b949e;
-  --blue: #3b82f6;
+  --blue: #2563eb;
   --blue-bright: #60a5fa;
   --amber: #f59e0b;
 }
@@ -24,7 +22,7 @@
   --text: #1a1d23;
   --text-muted: #57606a;
   --blue: #2563eb;
-  --blue-bright: #3b82f6;
+  --blue-bright: #1d4ed8;
   --amber: #d97706;
 }
 
@@ -37,7 +35,133 @@ body {
   color: var(--text);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  background: var(--bg);
+  padding: 16px;
+}
+.skip-link:focus {
+  top: 8px;
+}
+:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 4px;
+}
+.article-body {
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.article-body > div > * + * {
+  margin-top: 1.5rem;
+}
+.article-body h2 {
+  font-size: 1.8rem;
+  line-height: 1.3;
+  margin-top: 2.5rem;
+  font-weight: 500;
+}
+.article-body h3 {
+  font-size: 1.4rem;
+  line-height: 1.4;
+  margin-top: 2rem;
+  font-weight: 500;
+}
+.article-body a {
+  color: var(--blue-bright);
+  text-decoration: underline;
+}
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+.article-body figure {
+  margin-inline: 0;
+}
+.article-body figcaption {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.article-body pre {
+  padding: 1.25rem;
+  background: var(--bg-elev);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  white-space: pre;
+}
+.article-body ul,
+.article-body ol {
+  padding-left: 1.5rem;
+}
+.article-body ul {
+  list-style: disc;
+}
+.article-body ol {
+  list-style: decimal;
+}
+.article-body blockquote {
+  border-left: 3px solid var(--blue);
+  padding-left: 1.25rem;
+}
+.article-body table {
+  display: block;
+  overflow-x: auto;
+}
+.article-body td,
+.article-body th {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+}
+.portfolio-gallery > div {
+  display: grid;
+  gap: 1.5rem;
+}
+.portfolio-gallery article {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--bg-elev);
+}
+.portfolio-gallery article img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.portfolio-gallery article h2 {
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+}
+.portfolio-gallery article p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+.portfolio-gallery > div > * + * {
+  margin-top: 0;
+}
+@media (min-width: 768px) {
+  .portfolio-gallery > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 .font-display {
@@ -58,52 +182,112 @@ body {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 @keyframes pulse-ring {
-  0% { transform: scale(0.8); opacity: 0.8; }
-  100% { transform: scale(2.2); opacity: 0; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both; }
-.animate-fade-in { animation: fade-in 0.6s ease both; }
-.animate-scale-in { animation: scale-in 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-marquee { animation: marquee 30s linear infinite; }
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease both;
+}
+.animate-scale-in {
+  animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
 
-.delay-100 { animation-delay: 0.1s; }
-.delay-200 { animation-delay: 0.2s; }
-.delay-300 { animation-delay: 0.3s; }
-.delay-400 { animation-delay: 0.4s; }
-.delay-500 { animation-delay: 0.5s; }
+.delay-100 {
+  animation-delay: 0.1s;
+}
+.delay-200 {
+  animation-delay: 0.2s;
+}
+.delay-300 {
+  animation-delay: 0.3s;
+}
+.delay-400 {
+  animation-delay: 0.4s;
+}
+.delay-500 {
+  animation-delay: 0.5s;
+}
 
 .glass {
   background: color-mix(in srgb, var(--bg-elev) 70%, transparent);
@@ -120,8 +304,16 @@ body {
 
 .grid-bg {
   background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--border) 40%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--border) 40%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--border) 40%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--border) 40%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);

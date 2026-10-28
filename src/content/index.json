@@ -1,0 +1,517 @@
+{
+  "entries": [
+    {
+      "id": "ola-mundo",
+      "wordpressId": "1",
+      "path": "/sem-categoria/ola-mundo/",
+      "title": "Olá, mundo!",
+      "seoTitle": "Olá, mundo!",
+      "excerpt": "Olá, mundo. Esse é o meu blog!O meu jeito de ajudar desenvolvedores web como eu nos problemas e erros mais simples que acontecem no nosso dia a dia.Nas próxi",
+      "category": "Sem categoria",
+      "terms": [
+        {
+          "name": "Sem categoria",
+          "slug": "sem-categoria",
+          "type": "category"
+        }
+      ],
+      "image": "/media/9a89d1c777d82e83.webp",
+      "imageSmall": "/media/9a89d1c777d82e83-480.webp",
+      "imageSrcSet": "/media/9a89d1c777d82e83-480.webp 480w, /media/9a89d1c777d82e83-768.webp 768w, /media/9a89d1c777d82e83.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 625,
+      "published": "2020-07-18T23:14:39Z",
+      "modified": "2021-11-28T13:11:39Z",
+      "author": "rafaeldev",
+      "date": "18/07/2020",
+      "readTime": "1 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    },
+    {
+      "id": "politica-de-privacidade",
+      "wordpressId": "3",
+      "path": "/politica-de-privacidade/",
+      "title": "Política de privacidade",
+      "seoTitle": "Política de privacidade",
+      "excerpt": "Quem somos O endereço do nosso site é: https://rafaeldev.com.br/ Quais dados pessoais coletamos e porque Comentários Quando os visitantes deixam comentários ",
+      "category": "Desenvolvimento Web",
+      "terms": [],
+      "image": "",
+      "imageSmall": "",
+      "imageSrcSet": "",
+      "imageWidth": 0,
+      "imageHeight": 0,
+      "published": "2020-07-18T23:14:39Z",
+      "modified": "2023-12-27T22:34:19Z",
+      "author": "rafaeldev",
+      "date": "18/07/2020",
+      "readTime": "3 min",
+      "type": "article",
+      "kind": "page",
+      "tags": []
+    },
+    {
+      "id": "corrigindo-acentos-que-nao-aparecem-nas-paginas-html",
+      "wordpressId": "38",
+      "path": "/html/corrigindo-acentos-que-nao-aparecem-nas-paginas-html/",
+      "title": "Corrigindo acentos que não aparecem nas páginas HTML",
+      "seoTitle": "Corrigindo acentos que não aparecem nas páginas HTML",
+      "excerpt": "Saiba como corrigir se os acentos da sua página estão sendo substituídos por vários caracteres estranhos.",
+      "category": "HTML",
+      "terms": [
+        {
+          "name": "erros e bugs",
+          "slug": "erros-e-bugs",
+          "type": "post_tag"
+        },
+        {
+          "name": "HTML",
+          "slug": "html",
+          "type": "category"
+        }
+      ],
+      "image": "/media/39e73e10600cecba.webp",
+      "imageSmall": "/media/39e73e10600cecba-480.webp",
+      "imageSrcSet": "/media/39e73e10600cecba-480.webp 480w, /media/39e73e10600cecba-768.webp 768w, /media/39e73e10600cecba.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 626,
+      "published": "2020-08-08T06:34:36Z",
+      "modified": "2023-02-17T14:43:32Z",
+      "author": "rafaeldev",
+      "date": "08/08/2020",
+      "readTime": "2 min",
+      "type": "article",
+      "kind": "post",
+      "tags": [
+        "erros e bugs"
+      ]
+    },
+    {
+      "id": "para-que-serve-o-atributo-lang-e-porque-voce-deve-comecar-a-usa-lo",
+      "wordpressId": "50",
+      "path": "/html/para-que-serve-o-atributo-lang-e-porque-voce-deve-comecar-a-usa-lo/",
+      "title": "Para que serve o atributo lang e porque você deve começar a usá-lo",
+      "seoTitle": "Para que serve o atributo lang e porque você deve começar a usá-lo",
+      "excerpt": "Já vou adiantando que esse atributo não é tão inútil quanto parece.",
+      "category": "HTML",
+      "terms": [
+        {
+          "name": "atributos",
+          "slug": "atributos",
+          "type": "post_tag"
+        },
+        {
+          "name": "HTML",
+          "slug": "html",
+          "type": "category"
+        },
+        {
+          "name": "linguagem",
+          "slug": "linguagem",
+          "type": "post_tag"
+        }
+      ],
+      "image": "/media/ff73eebd6b145acf.webp",
+      "imageSmall": "/media/ff73eebd6b145acf-480.webp",
+      "imageSrcSet": "/media/ff73eebd6b145acf-480.webp 480w, /media/ff73eebd6b145acf-768.webp 768w, /media/ff73eebd6b145acf.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 625,
+      "published": "2020-08-17T11:00:00Z",
+      "modified": "2023-02-17T14:43:39Z",
+      "author": "rafaeldev",
+      "date": "17/08/2020",
+      "readTime": "3 min",
+      "type": "article",
+      "kind": "post",
+      "tags": [
+        "atributos",
+        "linguagem"
+      ]
+    },
+    {
+      "id": "como-fazer-um-diagnostico-de-site",
+      "wordpressId": "64",
+      "path": "/dicas/como-fazer-um-diagnostico-de-site/",
+      "title": "Como fazer um diagnóstico de site",
+      "seoTitle": "Como fazer um diagnóstico de site",
+      "excerpt": "Seja para melhorar seu site, o site de um cliente ou mesmo para julgar e aprender com um concorrente, a análise de desempenho de um site deve ser feita perio",
+      "category": "Dicas",
+      "terms": [
+        {
+          "name": "Dicas",
+          "slug": "dicas",
+          "type": "category"
+        }
+      ],
+      "image": "/media/5adeb47ee600087f.webp",
+      "imageSmall": "/media/5adeb47ee600087f-480.webp",
+      "imageSrcSet": "/media/5adeb47ee600087f-480.webp 480w, /media/5adeb47ee600087f-768.webp 768w, /media/5adeb47ee600087f.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 801,
+      "published": "2022-01-02T00:27:03Z",
+      "modified": "2022-01-02T19:26:43Z",
+      "author": "rafaeldev",
+      "date": "02/01/2022",
+      "readTime": "11 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    },
+    {
+      "id": "o-que-e-o-google-search-console-e-como-verificar-a-propriedade-do-seu-site",
+      "wordpressId": "211",
+      "path": "/tutoriais/o-que-e-o-google-search-console-e-como-verificar-a-propriedade-do-seu-site/",
+      "title": "O que é o Google Search Console e Como Verificar a Propriedade do seu Site",
+      "seoTitle": "Como Verificar sua Propriedade no Google Search Console",
+      "excerpt": "Não seria ótimo ter um painel que te mostrasse todos os termos de busca que os usuários usaram para acessa o seu site? Que mostrasse a taxa de cliques de cad",
+      "category": "Tutoriais",
+      "terms": [
+        {
+          "name": "Ferramentas",
+          "slug": "ferramentas",
+          "type": "post_tag"
+        },
+        {
+          "name": "Search Console",
+          "slug": "search-console",
+          "type": "post_tag"
+        },
+        {
+          "name": "Tutoriais",
+          "slug": "tutoriais",
+          "type": "category"
+        }
+      ],
+      "image": "/media/ef4ca8d80969c16c.webp",
+      "imageSmall": "/media/ef4ca8d80969c16c-480.webp",
+      "imageSrcSet": "/media/ef4ca8d80969c16c-480.webp 480w, /media/ef4ca8d80969c16c-768.webp 768w, /media/ef4ca8d80969c16c.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 625,
+      "published": "2023-02-17T14:30:35Z",
+      "modified": "2023-08-10T00:26:27Z",
+      "author": "rafaeldev",
+      "date": "17/02/2023",
+      "readTime": "6 min",
+      "type": "article",
+      "kind": "post",
+      "tags": [
+        "Ferramentas",
+        "Search Console"
+      ]
+    },
+    {
+      "id": "sobre",
+      "wordpressId": "234",
+      "path": "/sobre/",
+      "title": "Sobre",
+      "seoTitle": "Sobre",
+      "excerpt": "< QUEM É RAFAEL COPYRIGHT > identificação visual Facebook-f Instagram <!DOCTYPE html-curriculum> <html lang=\"pt-BR\" nivel-basico=\"es-UY\" nivel-basico=\"en\"> <",
+      "category": "Desenvolvimento Web",
+      "terms": [],
+      "image": "",
+      "imageSmall": "",
+      "imageSrcSet": "",
+      "imageWidth": 0,
+      "imageHeight": 0,
+      "published": "2022-06-22T01:56:14Z",
+      "modified": "2022-06-22T03:38:40Z",
+      "author": "rafaeldev",
+      "date": "22/06/2022",
+      "readTime": "1 min",
+      "type": "article",
+      "kind": "page",
+      "tags": []
+    },
+    {
+      "id": "sob-as-asas-do-segredo-blog-e-landing-page",
+      "wordpressId": "342",
+      "path": "/portfolio/sob-as-asas-do-segredo-blog-e-landing-page/",
+      "title": "Sob as Asas do Segredo - Blog e Landing Page",
+      "seoTitle": "Sob as Asas do Segredo - Blog e Landing Page",
+      "excerpt": "Um site com foco em blog para apresentar os textos de auto-ajuda de Rivelino Reis que originalmente estavam no canal do Youtube Sob as Asas do Segredo. O obj",
+      "category": "Desenvolvimento Web",
+      "terms": [],
+      "image": "/media/5cf78d9554030b56.webp",
+      "imageSmall": "/media/5cf78d9554030b56-480.webp",
+      "imageSrcSet": "/media/5cf78d9554030b56-480.webp 480w, /media/5cf78d9554030b56-768.webp 768w, /media/5cf78d9554030b56.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 675,
+      "published": "2022-07-16T19:58:40Z",
+      "modified": "2022-07-16T19:58:40Z",
+      "author": "rafaeldev",
+      "date": "16/07/2022",
+      "readTime": "1 min",
+      "type": "article",
+      "kind": "portfolio",
+      "tags": []
+    },
+    {
+      "id": "portfolio-de-sites",
+      "wordpressId": "350",
+      "path": "/portfolio-de-sites/",
+      "title": "Portfólio",
+      "seoTitle": "Portfólio",
+      "excerpt": "Amor & LimõesLoja Virtual que promove versatilidade e consumo consciente com a moda Loungewear e Lingerie.Fanfic da DudaSite de Fanfics interativas sobre vár",
+      "category": "Desenvolvimento Web",
+      "terms": [],
+      "image": "",
+      "imageSmall": "",
+      "imageSrcSet": "",
+      "imageWidth": 0,
+      "imageHeight": 0,
+      "published": "2022-07-17T13:53:36Z",
+      "modified": "2022-08-02T20:42:21Z",
+      "author": "rafaeldev",
+      "date": "17/07/2022",
+      "readTime": "1 min",
+      "type": "article",
+      "kind": "page",
+      "tags": []
+    },
+    {
+      "id": "5-motivos-para-escolher-o-wordpress-como-seu-cms-preferido",
+      "wordpressId": "470",
+      "path": "/wordpress/5-motivos-para-escolher-o-wordpress-como-seu-cms-preferido/",
+      "title": "5 Motivos para Escolher o WordPress como seu CMS Preferido",
+      "seoTitle": "5 Motivos para Escolher o WordPress como seu CMS Preferido",
+      "excerpt": "Tem muito CMS por aí, mas concerteza você já ouviu falar do Wordpress. Então toma 5 motivos para escolher ele no seu próximo site.",
+      "category": "Desenvolvimento Web",
+      "terms": [
+        {
+          "name": "Desenvolvimento Web",
+          "slug": "desenvolvimento-web",
+          "type": "category"
+        },
+        {
+          "name": "Dicas",
+          "slug": "dicas",
+          "type": "category"
+        },
+        {
+          "name": "WordPress",
+          "slug": "wordpress",
+          "type": "category"
+        }
+      ],
+      "image": "/media/de9abd7e2b1da4db.webp",
+      "imageSmall": "/media/de9abd7e2b1da4db-480.webp",
+      "imageSrcSet": "/media/de9abd7e2b1da4db-480.webp 480w, /media/de9abd7e2b1da4db-768.webp 768w, /media/de9abd7e2b1da4db.webp 1000w",
+      "imageWidth": 1000,
+      "imageHeight": 667,
+      "published": "2023-09-04T14:20:42Z",
+      "modified": "2023-09-15T00:12:37Z",
+      "author": "rafaeldev",
+      "date": "04/09/2023",
+      "readTime": "5 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    },
+    {
+      "id": "lp",
+      "wordpressId": "547",
+      "path": "/lp/",
+      "title": "Criação de sites para sua empresa",
+      "seoTitle": "Criação de sites profissionais",
+      "excerpt": "Alcance o sucesso online com um site incrível! Crie uma presença digital forte para sua empresa e alcance o público certo! Receber meu Orçamento Entendemos a",
+      "category": "Desenvolvimento Web",
+      "terms": [],
+      "image": "",
+      "imageSmall": "",
+      "imageSrcSet": "",
+      "imageWidth": 0,
+      "imageHeight": 0,
+      "published": "2023-09-23T21:22:04Z",
+      "modified": "2024-08-07T18:03:48Z",
+      "author": "rafaeldev",
+      "date": "23/09/2023",
+      "readTime": "2 min",
+      "type": "article",
+      "kind": "page",
+      "tags": []
+    },
+    {
+      "id": "como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display",
+      "wordpressId": "509",
+      "path": "/dicas/como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display/",
+      "title": "Como centralizar uma DIV com CSS: Com diferentes tipos de Display!",
+      "seoTitle": "Centralizar uma DIV com CSS: com diferentes Display!",
+      "excerpt": "Umas questão que assombra tanto um novato no CSS quanto eu semana passada. Como você deve saber: no desenvolvimento web, o CSS (Cascading Style Sheets) é sup",
+      "category": "CSS",
+      "terms": [
+        {
+          "name": "CSS",
+          "slug": "css",
+          "type": "category"
+        },
+        {
+          "name": "Desenvolvimento Web",
+          "slug": "desenvolvimento-web",
+          "type": "category"
+        },
+        {
+          "name": "Dicas",
+          "slug": "dicas",
+          "type": "category"
+        },
+        {
+          "name": "Tutoriais",
+          "slug": "tutoriais",
+          "type": "category"
+        }
+      ],
+      "image": "/media/5d5d8fb1503ef588.webp",
+      "imageSmall": "/media/5d5d8fb1503ef588-480.webp",
+      "imageSrcSet": "/media/5d5d8fb1503ef588-480.webp 480w, /media/5d5d8fb1503ef588-768.webp 768w, /media/5d5d8fb1503ef588.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 437,
+      "published": "2023-09-17T22:12:08Z",
+      "modified": "2023-09-17T22:12:08Z",
+      "author": "rafaeldev",
+      "date": "17/09/2023",
+      "readTime": "3 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    },
+    {
+      "id": "como-criar-um-site-gratis-as-8-melhores-plataformas-para-impulsionar-seu-projeto-sem-gastar-nada",
+      "wordpressId": "533",
+      "path": "/dicas/como-criar-um-site-gratis-as-8-melhores-plataformas-para-impulsionar-seu-projeto-sem-gastar-nada/",
+      "title": "Como Criar um Site Grátis: As 8 Melhores Plataformas para impulsionar seu Projeto SEM GASTAR NADA!",
+      "seoTitle": "Criar Site Grátis: 8 Melhores Plataformas para seu Projeto",
+      "excerpt": "Você precisa criar um site sem gastar nada? Conheça as melhores plataformas gratuitas para criar um site fácil, rápido e sem gastar nada.",
+      "category": "Desenvolvimento Web",
+      "terms": [
+        {
+          "name": "Desenvolvimento Web",
+          "slug": "desenvolvimento-web",
+          "type": "category"
+        },
+        {
+          "name": "Dicas",
+          "slug": "dicas",
+          "type": "category"
+        }
+      ],
+      "image": "/media/1abd4ccfd3a8bb38.webp",
+      "imageSmall": "/media/1abd4ccfd3a8bb38-480.webp",
+      "imageSrcSet": "/media/1abd4ccfd3a8bb38-480.webp 480w, /media/1abd4ccfd3a8bb38-768.webp 768w, /media/1abd4ccfd3a8bb38.webp 1000w",
+      "imageWidth": 1000,
+      "imageHeight": 667,
+      "published": "2023-09-18T12:32:56Z",
+      "modified": "2025-10-16T18:10:25Z",
+      "author": "rafaeldev",
+      "date": "18/09/2023",
+      "readTime": "6 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    },
+    {
+      "id": "como-funciona-a-internet",
+      "wordpressId": "658",
+      "path": "/desenvolvimento-web/como-funciona-a-internet/",
+      "title": "Como Funciona a Internet",
+      "seoTitle": "Como Funciona a Internet? Estrutura, Protocolos e Segurança.",
+      "excerpt": "A Internet e os principais elementos que a compõem: estrutura de conexões, protocolos, DNS, tecnologias de transmissão e segurança dos dados.",
+      "category": "Desenvolvimento Web",
+      "terms": [
+        {
+          "name": "Desenvolvimento Web",
+          "slug": "desenvolvimento-web",
+          "type": "category"
+        }
+      ],
+      "image": "/media/351a48edec0fa3da.webp",
+      "imageSmall": "/media/351a48edec0fa3da-480.webp",
+      "imageSrcSet": "/media/351a48edec0fa3da-480.webp 480w, /media/351a48edec0fa3da-768.webp 768w, /media/351a48edec0fa3da.webp 1200w",
+      "imageWidth": 1200,
+      "imageHeight": 686,
+      "published": "2024-11-11T17:10:12Z",
+      "modified": "2024-11-11T20:10:15Z",
+      "author": "Giovanna",
+      "date": "11/11/2024",
+      "readTime": "5 min",
+      "type": "article",
+      "kind": "post",
+      "tags": []
+    }
+  ],
+  "archives": [
+    {
+      "path": "/categoria/css/",
+      "title": "CSS",
+      "slug": "css",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/desenvolvimento-web/",
+      "title": "Desenvolvimento Web",
+      "slug": "desenvolvimento-web",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/dicas/",
+      "title": "Dicas",
+      "slug": "dicas",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/html/",
+      "title": "HTML",
+      "slug": "html",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/sem-categoria/",
+      "title": "Sem categoria",
+      "slug": "sem-categoria",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/tutoriais/",
+      "title": "Tutoriais",
+      "slug": "tutoriais",
+      "type": "category"
+    },
+    {
+      "path": "/categoria/wordpress/",
+      "title": "WordPress",
+      "slug": "wordpress",
+      "type": "category"
+    },
+    {
+      "path": "/assunto/atributos/",
+      "title": "atributos",
+      "slug": "atributos",
+      "type": "post_tag"
+    },
+    {
+      "path": "/assunto/erros-e-bugs/",
+      "title": "erros e bugs",
+      "slug": "erros-e-bugs",
+      "type": "post_tag"
+    },
+    {
+      "path": "/assunto/ferramentas/",
+      "title": "Ferramentas",
+      "slug": "ferramentas",
+      "type": "post_tag"
+    },
+    {
+      "path": "/assunto/linguagem/",
+      "title": "linguagem",
+      "slug": "linguagem",
+      "type": "post_tag"
+    },
+    {
+      "path": "/assunto/search-console/",
+      "title": "Search Console",
+      "slug": "search-console",
+      "type": "post_tag"
+    }
+  ]
+}

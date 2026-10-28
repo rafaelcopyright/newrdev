@@ -1,120 +1,88 @@
 import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, X, Code2 } from 'lucide-react';
-import { useNav, useTheme, type Page } from '@/nav';
+import { useTheme } from '@/features/theme/useTheme';
 
-const links: { label: string; page: Page }[] = [
-  { label: 'Início', page: { name: 'home' } },
-  { label: 'Portfólio', page: { name: 'portfolio' } },
-  { label: 'Orçamento', page: { name: 'quote' } },
+const links = [
+  { label: 'Início', to: '/' },
+  { label: 'Blog', to: '/blog/' },
+  { label: 'Portfólio', to: '/portfolio-de-sites/' },
+  { label: 'Sobre', to: '/sobre/' },
 ];
 
 export default function Header() {
-  const { navigate, page } = useNav();
-  const { toggle } = useTheme();
+  const { pathname } = useLocation();
+  const { toggle, isLight } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [isLight, setIsLight] = useState(false);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
   useEffect(() => {
-    setIsLight(document.documentElement.classList.contains('light'));
-  }, [toggle]);
-
-  const isActive = (p: Page) => p.name === page.name;
-
+    setOpen(false);
+  }, [pathname]);
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    `block px-4 py-2 rounded-lg text-sm font-medium ${isActive ? 'text-blue-bright' : 'text-muted hover:text-text'}`;
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? 'glass border-b border-border' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 inset-x-0 z-50 ${scrolled || open ? 'glass border-b border-border' : 'bg-bg'}`}
     >
       <div className="max-w-8xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-        <button
-          onClick={() => navigate({ name: 'home' })}
-          className="flex items-center gap-2.5 group"
-        >
-          <div className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center transition-transform group-hover:rotate-6 group-hover:scale-105">
-            <Code2 className="w-5 h-5 text-white" strokeWidth={2.2} />
-          </div>
-          <span className="text-lg font-medium tracking-tight">
+        <Link to="/" aria-label="Rafael.dev — Início" className="flex items-center gap-2.5">
+          <span className="w-9 h-9 rounded-xl bg-blue flex items-center justify-center">
+            <Code2 className="w-5 h-5 text-white" />
+          </span>
+          <span className="text-lg font-medium">
             Rafael<span className="text-blue-bright">.</span>dev
           </span>
-        </button>
-
-        <nav className="hidden md:flex items-center gap-1">
-          {links.map((l) => (
-            <button
-              key={l.label}
-              onClick={() => navigate(l.page)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                isActive(l.page)
-                  ? 'text-blue-bright'
-                  : 'text-muted hover:text-text hover:bg-bg-elev'
-              }`}
-            >
-              {l.label}
-            </button>
+        </Link>
+        <nav aria-label="Principal" className="hidden md:flex">
+          {links.map((link) => (
+            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={linkClass}>
+              {link.label}
+            </NavLink>
           ))}
         </nav>
-
         <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              toggle();
-              setIsLight((v) => !v);
-            }}
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-muted hover:text-text hover:bg-bg-elev transition-all duration-300"
+            onClick={toggle}
             aria-label="Alternar tema"
+            className="w-11 h-11 rounded-lg flex items-center justify-center text-muted hover:text-text"
           >
-            {isLight ? <Moon className="w-[18px] h-[18px]" /> : <Sun className="w-[18px] h-[18px]" />}
+            {isLight ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </button>
-          <button
-            onClick={() => navigate({ name: 'quote' })}
-            className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-blue text-white text-sm font-medium hover:bg-blue-bright transition-colors duration-300"
+          <Link
+            to="/orcamento/"
+            className="hidden sm:block px-4 py-2 rounded-lg bg-blue text-white text-sm font-medium"
           >
             Solicitar orçamento
-          </button>
+          </Link>
           <button
-            onClick={() => setOpen((v) => !v)}
-            className="md:hidden w-9 h-9 rounded-lg flex items-center justify-center text-text hover:bg-bg-elev transition-colors"
+            onClick={() => setOpen((value) => !value)}
             aria-label="Menu"
+            aria-expanded={open}
+            aria-controls="menu-mobile"
+            className="md:hidden w-11 h-11 flex items-center justify-center"
           >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {open ? <X /> : <Menu />}
           </button>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-400 ${
-          open ? 'max-h-72' : 'max-h-0'
-        } glass border-b border-border`}
-      >
-        <div className="px-6 py-4 flex flex-col gap-1">
-          {links.map((l) => (
-            <button
-              key={l.label}
-              onClick={() => {
-                navigate(l.page);
-                setOpen(false);
-              }}
-              className={`text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                isActive(l.page)
-                  ? 'text-blue-bright bg-bg-elev'
-                  : 'text-muted hover:text-text hover:bg-bg-elev'
-              }`}
-            >
-              {l.label}
-            </button>
+      {open && (
+        <nav id="menu-mobile" aria-label="Principal móvel" className="md:hidden px-6 py-4">
+          {links.map((link) => (
+            <NavLink key={link.to} to={link.to} end={link.to === '/'} className={linkClass}>
+              {link.label}
+            </NavLink>
           ))}
-        </div>
-      </div>
+          <NavLink to="/orcamento/" className={linkClass}>
+            Orçamento
+          </NavLink>
+        </nav>
+      )}
     </header>
   );
 }

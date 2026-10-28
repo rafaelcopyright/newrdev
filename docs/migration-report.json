@@ -1,0 +1,82 @@
+{
+  "entries": [
+    {
+      "wordpressId": "1",
+      "path": "/sem-categoria/ola-mundo/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "3",
+      "path": "/politica-de-privacidade/",
+      "kind": "page"
+    },
+    {
+      "wordpressId": "38",
+      "path": "/html/corrigindo-acentos-que-nao-aparecem-nas-paginas-html/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "50",
+      "path": "/html/para-que-serve-o-atributo-lang-e-porque-voce-deve-comecar-a-usa-lo/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "64",
+      "path": "/dicas/como-fazer-um-diagnostico-de-site/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "211",
+      "path": "/tutoriais/o-que-e-o-google-search-console-e-como-verificar-a-propriedade-do-seu-site/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "234",
+      "path": "/sobre/",
+      "kind": "page"
+    },
+    {
+      "wordpressId": "342",
+      "path": "/portfolio/sob-as-asas-do-segredo-blog-e-landing-page/",
+      "kind": "portfolio"
+    },
+    {
+      "wordpressId": "350",
+      "path": "/portfolio-de-sites/",
+      "kind": "page"
+    },
+    {
+      "wordpressId": "470",
+      "path": "/wordpress/5-motivos-para-escolher-o-wordpress-como-seu-cms-preferido/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "547",
+      "path": "/lp/",
+      "kind": "page"
+    },
+    {
+      "wordpressId": "509",
+      "path": "/dicas/como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "533",
+      "path": "/dicas/como-criar-um-site-gratis-as-8-melhores-plataformas-para-impulsionar-seu-projeto-sem-gastar-nada/",
+      "kind": "post"
+    },
+    {
+      "wordpressId": "658",
+      "path": "/desenvolvimento-web/como-funciona-a-internet/",
+      "kind": "post"
+    }
+  ],
+  "aliases": [
+    {
+      "from": "/css/como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display/",
+      "to": "/dicas/como-centralizar-uma-div-com-css-com-diferentes-tipos-de-display/"
+    }
+  ],
+  "missingSitemapPaths": [],
+  "mediaFailures": []
+}
