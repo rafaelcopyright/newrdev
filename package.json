@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "import:wordpress": "node scripts/import-wordpress.mjs",
-    "preview:static": "node scripts/serve.mjs"
+    "preview:static": "node scripts/serve.mjs",
+    "verify:build": "node scripts/verify-build.mjs",
+    "verify:browser": "node scripts/verify-browser.mjs",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/*.mjs\""
   },
   "dependencies": {
     "lucide-react": "^0.446.0",

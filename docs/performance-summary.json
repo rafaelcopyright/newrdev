@@ -1,0 +1,125 @@
+{
+  "environment": "Local production build, Lighthouse lab simulation; not PageSpeed Insights on the live domain.",
+  "results": [
+    {
+      "report": "lighthouse-article-desktop.json",
+      "path": "/desenvolvimento-web/como-funciona-a-internet/",
+      "device": "desktop",
+      "fetched": "2026-10-28T18:48:59.180Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "0.7 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-article-mobile.json",
+      "path": "/desenvolvimento-web/como-funciona-a-internet/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:47:49.947Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 94,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "3.2 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-blog-mobile.json",
+      "path": "/blog/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:47:36.262Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 94,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "3.1 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-home-desktop.json",
+      "path": "/",
+      "device": "desktop",
+      "fetched": "2026-10-28T18:48:44.958Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "0.2 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-home-mobile.json",
+      "path": "/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:47:21.899Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "0.9 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-long-mobile.json",
+      "path": "/dicas/como-fazer-um-diagnostico-de-site/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:48:17.447Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "2.7 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-lp-mobile.json",
+      "path": "/lp/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:48:31.221Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "2.3 s",
+      "cls": "0"
+    },
+    {
+      "report": "lighthouse-portfolio-mobile.json",
+      "path": "/portfolio-de-sites/",
+      "device": "mobile",
+      "fetched": "2026-10-28T18:48:03.725Z",
+      "lighthouse": "13.6.0",
+      "scores": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcp": "2.8 s",
+      "cls": "0"
+    }
+  ]
+}
