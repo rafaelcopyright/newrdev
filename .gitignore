@@ -21,3 +21,9 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# WordPress exports contain private author/comment data; never publish or commit them.
+auxiliares/
+docs/lighthouse-*.json
+docs/screenshots/
+src/content/wordpress.json
