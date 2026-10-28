@@ -56,6 +56,14 @@ As medições locais são testes de laboratório da build, não resultados do Pa
 
 ## Publicação no cPanel
 
+O workflow `.github/workflows/main.yml` faz a publicação automática em cada push para `main`. Também pode ser iniciado em **Actions → Build e publicação do site → Run workflow**, selecionando `main`.
+
+O Node.js 24 roda exclusivamente no runner do GitHub: `npm ci`, TypeScript, ESLint, auditoria de vulnerabilidades High/critical, build e verificação estática das 29 rotas. Se alguma etapa falhar, o envio por FTP não começa. Somente o conteúdo de `dist/` é enviado, incluindo `.htaccess`. O servidor não precisa de Node.js. A exportação privada do WordPress não é necessária para compilar o conteúdo já importado.
+
+Foram preservados o servidor `ftp.rafaeldev.com.br`, os secrets `ftp_username`/`ftp_password` e o destino `./`, relativo à raiz da conta FTP que já estava funcionando. Essa raiz precisa corresponder à pasta pública do domínio. As actions usam revisões fixas e o token do GitHub tem apenas leitura.
+
+Os deploys são serializados para evitar dois envios simultâneos. O novo manifesto `.rafaeldev-dist-sync-state.json` separa a publicação da build do antigo envio do repositório inteiro, sem limpeza geral do servidor. Arquivos antigos do envio anterior podem permanecer e precisam de revisão antes de qualquer remoção. A sincronização FTP não é uma troca atômica: uma falha durante o upload pode exigir reexecutar o workflow. Credenciais e protocolo FTP existentes foram preservados; se a hospedagem oferecer FTPS, configure `protocol: ftps` e `security: strict` na etapa de publicação.
+
 1. Faça backup do WordPress, banco e uploads antes de substituir o site.
 2. Envie **somente o conteúdo de `dist/`**, incluindo `.htaccess`, para `public_html`. Não envie o repositório ou `auxiliares/`. Preserve uploads antigos que tenham links externos e não estejam no conjunto importado; o WXR não contém todos os arquivos do servidor.
 3. Use certificado TLS válido. A configuração assume `https://rafaeldev.com.br`, com redirecionamento de HTTP e `www`. Em CDN/proxy, valide a detecção de HTTPS do Apache para evitar loop.

@@ -1,16 +1,68 @@
-on: push
-name: 🚀 Deploy website on push
+name: Build e publicação do site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: producao-ftp
+  cancel-in-progress: false
+
 jobs:
   web-deploy:
-    name: 🎉 Deploy
+    name: Validar, compilar e publicar
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v6
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-      with:
-        server: ftp.rafaeldev.com.br
-        username: ${{ secrets.ftp_username }}
-        password: ${{ secrets.ftp_password }}
+      - name: Obter código
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Configurar Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Instalar dependências do lockfile
+        run: npm ci
+
+      - name: Validar código e dependências
+        run: |
+          npm run typecheck
+          npm run lint
+          npm audit --audit-level=high
+
+      - name: Gerar páginas estáticas
+        run: npm run build
+
+      - name: Verificar páginas, links e redirecionamentos
+        shell: bash
+        run: |
+          node scripts/serve.mjs > "$RUNNER_TEMP/preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          curl --fail --silent --show-error --retry 20 --retry-connrefused --retry-delay 1 --output /dev/null http://127.0.0.1:4173/
+          npm run verify:build
+
+      - name: Publicar somente a build por FTP
+        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
+        with:
+          server: ftp.rafaeldev.com.br
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: .rafaeldev-dist-sync-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/media/*.json
