@@ -1,13 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import type { ContentEntry } from '@/data';
+import { siteConfig } from '@/config/site';
 
-const origin = 'https://rafaeldev.com.br';
+const origin = siteConfig.canonicalOrigin;
 type Props = { title: string; description: string; entry?: ContentEntry; noindex?: boolean };
 export default function Seo({ title, description, entry, noindex = false }: Props) {
   const { pathname } = useLocation();
   const canonical = origin + pathname;
-  const image = origin + (entry?.image || '/social.png');
+  const image = siteConfig.origin + (entry?.image || '/social.png');
   const schema = entry
     ? {
         '@context': 'https://schema.org',
@@ -35,7 +36,11 @@ export default function Seo({ title, description, entry, noindex = false }: Prop
       <meta name="description" content={description} />
       <meta
         name="robots"
-        content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}
+        content={
+          noindex || !siteConfig.indexable
+            ? 'noindex, follow'
+            : 'index, follow, max-image-preview:large'
+        }
       />
       <link rel="canonical" href={canonical} />
       <meta property="og:locale" content="pt_BR" />

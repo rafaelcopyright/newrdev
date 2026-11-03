@@ -4,21 +4,53 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      ambiente:
+        description: Ambiente de publicação
+        required: true
+        type: choice
+        default: homologacao
+        options:
+          - homologacao
+          - producao
 
 permissions:
   contents: read
 
 concurrency:
-  group: producao-ftp
+  group: ftp-${{ inputs.ambiente || 'homologacao' }}
   cancel-in-progress: false
 
 jobs:
   web-deploy:
-    name: Validar, compilar e publicar
+    name: Publicar em ${{ inputs.ambiente || 'homologacao' }}
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    environment:
+      name: ${{ inputs.ambiente || 'homologacao' }}
+      url: ${{ inputs.ambiente == 'producao' && 'https://rafaeldev.com.br' || 'https://new.rafaeldev.com.br' }}
+    env:
+      VITE_DEPLOY_ENV: ${{ inputs.ambiente || 'homologacao' }}
     steps:
+      - name: Verificar credenciais de homologação
+        if: env.VITE_DEPLOY_ENV == 'homologacao'
+        shell: bash
+        env:
+          FTP_USERNAME: ${{ secrets.ftp_username }}
+          FTP_PASSWORD: ${{ secrets.ftp_password }}
+        run: |
+          test -n "$FTP_USERNAME" && test -n "$FTP_PASSWORD" || { echo '::error::Configure ftp_username e ftp_password.'; exit 1; }
+
+      - name: Verificar credenciais de produção
+        if: env.VITE_DEPLOY_ENV == 'producao'
+        shell: bash
+        env:
+          FTP_USERNAME: ${{ secrets.PROD_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.PROD_FTP_PASSWORD }}
+        run: |
+          test -n "$FTP_USERNAME" && test -n "$FTP_PASSWORD" || { echo '::error::Configure PROD_FTP_USERNAME e PROD_FTP_PASSWORD.'; exit 1; }
+
       - name: Obter código
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
@@ -51,7 +83,8 @@ jobs:
           curl --fail --silent --show-error --retry 20 --retry-connrefused --retry-delay 1 --output /dev/null http://127.0.0.1:4173/
           npm run verify:build
 
-      - name: Publicar somente a build por FTP
+      - name: Publicar homologação por FTP
+        if: env.VITE_DEPLOY_ENV == 'homologacao'
         uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
         with:
           server: ftp.rafaeldev.com.br
@@ -60,6 +93,23 @@ jobs:
           local-dir: ./dist/
           server-dir: ./
           state-name: .rafaeldev-dist-sync-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/media/*.json
+
+      - name: Publicar produção por FTP
+        if: env.VITE_DEPLOY_ENV == 'producao'
+        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
+        with:
+          server: ftp.rafaeldev.com.br
+          username: ${{ secrets.PROD_FTP_USERNAME }}
+          password: ${{ secrets.PROD_FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ./
+          state-name: .rafaeldev-prod-dist-sync-state.json
           dangerous-clean-slate: false
           exclude: |
             **/.git*

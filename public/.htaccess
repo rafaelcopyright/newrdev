@@ -4,9 +4,7 @@ ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteCond %{HTTPS} !=on [OR]
-RewriteCond %{HTTP_HOST} ^www\.rafaeldev\.com\.br$ [NC]
-RewriteRule ^ https://rafaeldev.com.br%{REQUEST_URI} [R=301,L,NE]
+# canonical-redirects
 # migration-redirects
 RewriteRule ^(?:wp-admin|wp-includes)(?:/|$) - [R=404,L]
 RewriteRule \.php(?:/|$) - [R=404,L,NC]
@@ -18,6 +16,7 @@ Require all denied
 </FilesMatch>
 
 <IfModule mod_headers.c>
+# environment-headers
 Header always set X-Content-Type-Options "nosniff"
 Header always set X-Frame-Options "DENY"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"

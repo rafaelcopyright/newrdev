@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { render } from '../dist-ssr/entry-server.js';
+import { render, siteConfig } from '../dist-ssr/entry-server.js';
 
-const origin = 'https://rafaeldev.com.br';
+const origin = siteConfig.origin;
 const { entries, archives } = JSON.parse(await readFile('src/content/index.json', 'utf8'));
 const report = JSON.parse(await readFile('docs/migration-report.json', 'utf8'));
 if (report.missingSitemapPaths.length || report.mediaFailures.length)
@@ -71,9 +71,17 @@ const queryRules = entries
   )
   .join('\n');
 const base = await readFile('public/.htaccess', 'utf8');
+const hostname = new URL(origin).hostname.replaceAll('.', '\\.');
+const canonicalRedirects = `RewriteCond %{HTTPS} !=on [OR]\nRewriteCond %{HTTP_HOST} !^${hostname}$ [NC]\nRewriteRule ^ ${origin}%{REQUEST_URI} [R=301,L,NE]`;
+const indexingHeader = siteConfig.indexable
+  ? ''
+  : 'Header always set X-Robots-Tag "noindex, follow"';
 await writeFile(
   'dist/.htaccess',
-  base.replace('# migration-redirects', redirectRules + '\n' + queryRules),
+  base
+    .replace('# migration-redirects', redirectRules + '\n' + queryRules)
+    .replace('# canonical-redirects', canonicalRedirects)
+    .replace('# environment-headers', indexingHeader),
 );
 await writeFile('docs/routes.json', JSON.stringify(routes, null, 2));
-console.log(`Generated ${routes.length} static pages, 404, sitemaps and redirects.`);
+console.log(`Generated ${routes.length} static pages for ${siteConfig.environment}: ${origin}.`);

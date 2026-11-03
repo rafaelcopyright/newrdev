@@ -1,8 +1,21 @@
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import { JSDOM } from 'jsdom';
+import { siteConfig } from '../dist-ssr/entry-server.js';
 
-const origin = 'https://rafaeldev.com.br';
+const origin = siteConfig.canonicalOrigin;
+const previewOrigin = process.env.PREVIEW_URL || 'http://127.0.0.1:4173';
+const apache = await readFile('dist/.htaccess', 'utf8');
+assert(apache.includes(`RewriteRule ^ ${siteConfig.origin}%{REQUEST_URI}`));
+assert.equal(
+  apache.includes('Header always set X-Robots-Tag "noindex, follow"'),
+  !siteConfig.indexable,
+);
+assert(
+  (await readFile('dist/sitemap_index.xml', 'utf8')).includes(
+    siteConfig.origin + '/post-sitemap.xml',
+  ),
+);
 const routes = JSON.parse(await readFile('docs/routes.json', 'utf8'));
 const { entries } = JSON.parse(await readFile('src/content/index.json', 'utf8'));
 const report = JSON.parse(await readFile('docs/migration-report.json', 'utf8'));
@@ -16,6 +29,10 @@ for (const path of routes) {
   assert.equal(document.querySelectorAll('title').length, 1, `Title: ${path}`);
   assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);
   assert.equal(document.querySelector('link[rel="canonical"]').href, origin + path);
+  assert.equal(
+    document.querySelector('meta[name="robots"]').content.includes('noindex'),
+    !siteConfig.indexable,
+  );
   assert(!html.includes('<!--app-html-->'));
   const content = entries.find((entry) => entry.path === path);
   if (content && path !== '/portfolio-de-sites/')
@@ -32,6 +49,9 @@ for (const path of routes) {
   for (const img of document.querySelectorAll('img')) {
     assert(img.hasAttribute('width') && img.hasAttribute('height'), `Image dimensions: ${path}`);
     await access('dist' + img.getAttribute('src'));
+    for (const candidate of (img.getAttribute('srcset') || '').split(',').filter(Boolean)) {
+      await access('dist' + candidate.trim().split(/\s+/)[0]);
+    }
   }
   for (const link of document.querySelectorAll('a[href^="#"]')) {
     const id = decodeURIComponent(link.getAttribute('href').slice(1));
@@ -46,14 +66,18 @@ for (const path of routes) {
       missingLinks.push({ path, target });
     }
   }
-  const response = await fetch('http://127.0.0.1:4173' + path);
+  const response = await fetch(previewOrigin + path);
   assert.equal(response.status, 200, path);
+  assert.equal(
+    response.headers.get('x-robots-tag'),
+    siteConfig.indexable ? null : 'noindex, follow',
+  );
 }
-const missing = await fetch('http://127.0.0.1:4173/does-not-exist/');
+const missing = await fetch(previewOrigin + '/does-not-exist/');
 assert.equal(missing.status, 404);
 assert((await missing.text()).includes('noindex, follow'));
 for (const alias of report.aliases) {
-  const response = await fetch('http://127.0.0.1:4173' + alias.from, { redirect: 'manual' });
+  const response = await fetch(previewOrigin + alias.from, { redirect: 'manual' });
   assert.equal(response.status, 301);
   assert.equal(response.headers.get('location'), alias.to);
 }
