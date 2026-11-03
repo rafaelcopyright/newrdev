@@ -56,13 +56,32 @@ As medições locais são testes de laboratório da build, não resultados do Pa
 
 ## Publicação no cPanel
 
-O workflow `.github/workflows/main.yml` faz a publicação automática em cada push para `main`. Também pode ser iniciado em **Actions → Build e publicação do site → Run workflow**, selecionando `main`.
+O workflow `.github/workflows/main.yml` publica automaticamente **em homologação** a cada push para `main`. Produção é publicada manualmente após validar a homologação. O passo a passo completo está em [.github/workflows/README.md](.github/workflows/README.md).
+
+| Ambiente    | Site                           | Secrets do GitHub                        | Acionamento                                                   |
+| ----------- | ------------------------------ | ---------------------------------------- | ------------------------------------------------------------- |
+| Homologação | `https://new.rafaeldev.com.br` | `ftp_username`, `ftp_password`           | Push na `main` ou execução manual com `ambiente: homologacao` |
+| Produção    | `https://rafaeldev.com.br`     | `PROD_FTP_USERNAME`, `PROD_FTP_PASSWORD` | Execução manual na `main` com `ambiente: producao`            |
+
+Para publicar em produção: faça o push, confira o site de homologação e abra **Actions → Build e publicação do site → Run workflow**. Selecione a branch `main` e o ambiente `producao`. Execuções manuais em outra branch são ignoradas nos dois ambientes.
 
 O Node.js 24 roda exclusivamente no runner do GitHub: `npm ci`, TypeScript, ESLint, auditoria de vulnerabilidades High/critical, build e verificação estática das 29 rotas. Se alguma etapa falhar, o envio por FTP não começa. Somente o conteúdo de `dist/` é enviado, incluindo `.htaccess`. O servidor não precisa de Node.js. A exportação privada do WordPress não é necessária para compilar o conteúdo já importado.
 
-Foram preservados o servidor `ftp.rafaeldev.com.br`, os secrets `ftp_username`/`ftp_password` e o destino `./`, relativo à raiz da conta FTP que já estava funcionando. Essa raiz precisa corresponder à pasta pública do domínio. As actions usam revisões fixas e o token do GitHub tem apenas leitura.
+O servidor FTP é `ftp.rafaeldev.com.br` para ambos os ambientes. O destino permanece `./`, relativo à raiz de cada conta FTP: a conta de homologação já aponta para `new.rafaeldev.com.br` e a conta de produção aponta diretamente para `public_html`. Não acrescente `public_html/` ao destino de produção. As actions usam revisões fixas e o token do GitHub tem apenas leitura. Nenhuma credencial é incluída na build.
 
-Os deploys são serializados para evitar dois envios simultâneos. O novo manifesto `.rafaeldev-dist-sync-state.json` separa a publicação da build do antigo envio do repositório inteiro, sem limpeza geral do servidor. Arquivos antigos do envio anterior podem permanecer e precisam de revisão antes de qualquer remoção. A sincronização FTP não é uma troca atômica: uma falha durante o upload pode exigir reexecutar o workflow. Credenciais e protocolo FTP existentes foram preservados; se a hospedagem oferecer FTPS, configure `protocol: ftps` e `security: strict` na etapa de publicação.
+Os deploys são serializados por ambiente. Homologação usa o manifesto `.rafaeldev-dist-sync-state.json`; produção usa `.rafaeldev-prod-dist-sync-state.json`. Não existe limpeza geral do servidor. Arquivos antigos do envio anterior podem permanecer e precisam de revisão antes de qualquer remoção. A sincronização FTP não é uma troca atômica: uma falha durante o upload pode exigir reexecutar o workflow. O protocolo FTP existente foi preservado; se a hospedagem oferecer FTPS, configure `protocol: ftps` e `security: strict` nas duas etapas de publicação.
+
+A configuração `VITE_DEPLOY_ENV` define a build: `homologacao` usa HTTPS no próprio subdomínio, imagens e sitemaps de homologação, e `noindex` no HTML e no cabeçalho HTTP. Os canonical continuam apontando para produção. O `robots.txt` permite o rastreamento para que o buscador possa ler o `noindex`; não envie o sitemap de homologação ao Search Console. Essa restrição de indexação não é autenticação. `producao` usa o domínio principal e permite indexação. Sem a variável, o build local assume produção.
+
+Para testar a build de homologação no PowerShell:
+
+```powershell
+$env:VITE_DEPLOY_ENV = 'homologacao'
+npm run build
+npm run preview:static
+# Após encerrar o preview, remova a variável para voltar à build de produção:
+Remove-Item Env:VITE_DEPLOY_ENV
+```
 
 1. Faça backup do WordPress, banco e uploads antes de substituir o site.
 2. Envie **somente o conteúdo de `dist/`**, incluindo `.htaccess`, para `public_html`. Não envie o repositório ou `auxiliares/`. Preserve uploads antigos que tenham links externos e não estejam no conjunto importado; o WXR não contém todos os arquivos do servidor.
