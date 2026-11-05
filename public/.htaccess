@@ -7,6 +7,7 @@ RewriteEngine On
 # canonical-redirects
 # migration-redirects
 RewriteRule ^(?:wp-admin|wp-includes)(?:/|$) - [R=404,L]
+RewriteRule ^api/orcamento\.php$ - [END]
 RewriteRule \.php(?:/|$) - [R=404,L,NC]
 # Existing directories supply prerendered HTML. Unknown routes retain HTTP 404.
 </IfModule>

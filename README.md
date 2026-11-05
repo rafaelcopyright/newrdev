@@ -32,7 +32,7 @@ O catálogo público fica em `src/content/index.json`; os corpos sanitizados fic
 
 As URLs do sitemap antigo são preservadas, incluindo `/categoria/`, `/assunto/`, `/portfolio-de-sites/` e o projeto em `/portfolio/…/`. O artigo sobre DIV usa `/dicas/…/`, conforme o sitemap público; o endereço `/css/…/` do WXR recebe 301. Links com `?p=ID` ou `?page_id=ID` dos conteúdos internos migrados também recebem 301 no Apache. A antiga página inicial é substituída pela nova home.
 
-O formulário de orçamento prepara um email para o endereço de contato que já aparece nos artigos públicos do site. O visitante precisa revisar e enviar no seu aplicativo de email. Não existe confirmação falsa de recebimento. Newsletter demonstrativa removida. GTM e AdSense do material auxiliar não foram ativados; sua inclusão exige rever consentimento, CSP e desempenho.
+O formulário de orçamento envia JSON para `/api/orcamento.php`, incluído em `dist/`, com destinatário fixo `contato@rafaeldev.com.br`. A hospedagem precisa executar PHP 7.4+ e ter o transporte de e-mail (`mail()`) habilitado e configurado no cPanel, com SPF/DKIM do domínio. O botão “Chame no WhatsApp”, exclusivo desse formulário, abre uma mensagem com os dados preenchidos para +55 11 96900-5617; o visitante confirma o envio no WhatsApp. O endpoint valida a origem, limita o tamanho dos campos, usa honeypot e restringe envios a um por minuto por IP. A confirmação indica aceitação pelo transporte, sem garantir entrega na caixa de entrada. Valide o recebimento em homologação após publicar; o preview estático e o Vite não executam PHP. Newsletter demonstrativa removida. GTM e AdSense do material auxiliar não foram ativados; sua inclusão exige rever consentimento, CSP e desempenho.
 
 ## Verificação
 
@@ -41,6 +41,7 @@ Com `preview:static` rodando em outro terminal:
 ```sh
 node scripts/verify-build.mjs
 node scripts/verify-browser.mjs
+node scripts/verify-quote.mjs
 npm audit --audit-level=high
 ```
 

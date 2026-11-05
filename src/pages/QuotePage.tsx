@@ -240,15 +240,55 @@ const commonFields: Field[] = [
 export default function QuotePage() {
   const [selected, setSelected] = useState<ProjectType | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState<Record<string, string>>({});
 
   const update = (name: string, value: string) => setForm((f) => ({ ...f, [name]: value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!selected || sending) return;
+    setSending(true);
+    setError('');
+    const fields = [
+      ...commonFields,
+      ...fieldsByType[selected],
+      { name: 'message', label: 'Mensagem' },
+    ];
+    try {
+      const response = await fetch('/api/orcamento.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          project: selected,
+          email: form.email,
+          website: new FormData(e.currentTarget).get('website'),
+          details: fields.map(({ name, label }) => ({ label, value: form[name] ?? '' })),
+        }),
+        signal: AbortSignal.timeout(20000),
+      });
+      const result: { success?: boolean } = await response.json();
+      if (!response.ok || result.success !== true) throw new Error('Falha no envio');
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      setError(
+        'Não foi possível confirmar o envio. Tente novamente ou entre em contato pelo contato@rafaeldev.com.br.',
+      );
+    } finally {
+      setSending(false);
+    }
   };
+
+  const whatsappMessage = selected
+    ? [
+        'Olá! Gostaria de um orçamento para ' + selected + '.',
+        ...[...commonFields, ...fieldsByType[selected], { name: 'message', label: 'Mensagem' }]
+          .filter(({ name }) => form[name]?.trim())
+          .map(({ name, label }) => label + ': ' + form[name]),
+      ].join('\n')
+    : '';
 
   if (submitted) {
     return (
@@ -257,25 +297,10 @@ export default function QuotePage() {
           <div className="w-20 h-20 rounded-full bg-blue/10 flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-10 h-10 text-blue-bright" />
           </div>
-          <h1 className="font-display text-4xl mb-4">Revise e envie seu pedido</h1>
+          <h1 className="font-display text-4xl mb-4">Pedido enviado!</h1>
           <p className="text-muted mb-8">
-            Seu resumo para <span className="text-text">{selected}</span> está pronto. Abra seu
-            aplicativo de email para revisar e enviar. O pedido só será recebido depois do envio por
-            você.
+            Sua solicitação de {selected} foi enviada. Responderei pelo contato informado.
           </p>
-          <a
-            href={`mailto:contato@rafaeldev.com.br?subject=${encodeURIComponent(`Orçamento: ${selected}`)}&body=${encodeURIComponent(
-              Object.entries(form)
-                .map(
-                  ([key, value]) =>
-                    `${[...commonFields, ...fieldsByType[selected!], { name: 'message', label: 'Mensagem' }].find((field) => field.name === key)?.label || key}: ${value}`,
-                )
-                .join('\n'),
-            )}`}
-            className="block px-6 py-3.5 mb-4 rounded-xl bg-blue text-white"
-          >
-            Abrir email para enviar
-          </a>
           <button
             onClick={() => {
               setSubmitted(false);
@@ -359,70 +384,94 @@ export default function QuotePage() {
 
         {/* STEP 2: DYNAMIC FORM */}
         {selected && (
-          <form onSubmit={handleSubmit} className="animate-fade-up">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-7 h-7 rounded-full bg-blue text-white text-sm font-medium flex items-center justify-center">
-                2
-              </span>
-              <h2 className="font-display-md text-2xl">Detalhes do projeto</h2>
+          <form onSubmit={handleSubmit} className="animate-fade-up" aria-busy={sending}>
+            <div className="hidden" aria-hidden="true">
+              <label>
+                Website
+                <input name="website" tabIndex={-1} autoComplete="off" />
+              </label>
             </div>
-
-            <div className="rounded-2xl border border-border bg-bg-elev p-6 sm:p-8 space-y-5">
-              {/* Common contact fields */}
-              <div className="grid sm:grid-cols-2 gap-5">
-                {commonFields.map((f) => (
-                  <FieldInput
-                    key={f.name}
-                    field={f}
-                    value={form[f.name] ?? ''}
-                    onChange={(v) => update(f.name, v)}
-                  />
-                ))}
+            <fieldset disabled={sending} className="min-w-0">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="w-7 h-7 rounded-full bg-blue text-white text-sm font-medium flex items-center justify-center">
+                  2
+                </span>
+                <h2 className="font-display-md text-2xl">Detalhes do projeto</h2>
               </div>
 
-              <div className="border-t border-border pt-5">
-                <p className="text-xs uppercase tracking-widest text-blue-bright mb-4">
-                  Específico · {selected}
-                </p>
+              <div className="rounded-2xl border border-border bg-bg-elev p-6 sm:p-8 space-y-5">
+                {/* Common contact fields */}
                 <div className="grid sm:grid-cols-2 gap-5">
-                  {fieldsByType[selected].map((f) => (
+                  {commonFields.map((f) => (
                     <FieldInput
                       key={f.name}
                       field={f}
                       value={form[f.name] ?? ''}
                       onChange={(v) => update(f.name, v)}
-                      full={!f.half}
                     />
                   ))}
                 </div>
-              </div>
 
-              {/* Optional message */}
-              <div className="border-t border-border pt-5">
-                <FieldInput
-                  field={{
-                    name: 'message',
-                    label: 'Algo mais?',
-                    type: 'textarea',
-                    placeholder: 'Compartilhe qualquer detalhe extra que ache relevante...',
-                  }}
-                  value={form.message ?? ''}
-                  onChange={(v) => update('message', v)}
-                  full
-                />
+                <div className="border-t border-border pt-5">
+                  <p className="text-xs uppercase tracking-widest text-blue-bright mb-4">
+                    Específico · {selected}
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    {fieldsByType[selected].map((f) => (
+                      <FieldInput
+                        key={f.name}
+                        field={f}
+                        value={form[f.name] ?? ''}
+                        onChange={(v) => update(f.name, v)}
+                        full={!f.half}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Optional message */}
+                <div className="border-t border-border pt-5">
+                  <FieldInput
+                    field={{
+                      name: 'message',
+                      label: 'Algo mais?',
+                      type: 'textarea',
+                      placeholder: 'Compartilhe qualquer detalhe extra que ache relevante...',
+                    }}
+                    value={form.message ?? ''}
+                    onChange={(v) => update('message', v)}
+                    full
+                  />
+                </div>
               </div>
+            </fieldset>
+            {error && (
+              <p role="alert" className="mt-4 text-sm text-text">
+                {error}
+              </p>
+            )}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                disabled={sending}
+                type="submit"
+                className="group mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-blue text-white font-medium hover:bg-blue/90 transition-all duration-300"
+              >
+                {sending ? 'Enviando...' : 'Enviar por Email'}
+                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <a
+                href={'https://wa.me/5511969005617?text=' + encodeURIComponent(whatsappMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl border border-border text-text font-medium hover:border-blue/40 transition-colors"
+              >
+                Chame no WhatsApp
+              </a>
             </div>
 
-            <button
-              type="submit"
-              className="group mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-blue text-white font-medium hover:bg-blue/90 transition-all duration-300"
-            >
-              Preparar pedido por email
-              <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-
             <p className="text-center text-xs text-muted mt-4">
-              Revise o resumo e envie pelo seu aplicativo de email · Sem compromisso
+              Envio direto para contato@rafaeldev.com.br · Sem compromisso
             </p>
           </form>
         )}

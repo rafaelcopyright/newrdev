@@ -36,6 +36,12 @@ const server = createServer(async (request, response) => {
     response.writeHead(400).end();
     return;
   }
+  if (/\.php(?:\/|$)/i.test(path)) {
+    response
+      .writeHead(503, { 'Content-Type': 'application/json' })
+      .end(JSON.stringify({ success: false }));
+    return;
+  }
   const alias = aliases.find((alias) => alias.from.replace(/\/$/, '') === path.replace(/\/$/, ''));
   const queryId = url.searchParams.get('p') || url.searchParams.get('page_id');
   const queryTarget =
