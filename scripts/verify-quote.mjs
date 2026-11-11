@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { chromium, expect } from '@playwright/test';
+/* global window */
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -45,12 +46,17 @@ try {
   assert.equal(whatsapp.pathname, '/5511969005617');
   assert.match(whatsapp.searchParams.get('text'), /Nome completo: Cliente Teste/);
   assert.match(whatsapp.searchParams.get('text'), /Número de páginas: 4/);
+  await page.evaluate(() => {
+    window.quoteConversionEvents = [];
+    window.gtag = (...args) => window.quoteConversionEvents.push(args);
+  });
   await page.route('**/api/orcamento.php', (route) =>
     route.fulfill({ status: 503, json: { success: false } }),
   );
   await page.getByRole('button', { name: 'Enviar por Email' }).click();
   await page.getByRole('alert').waitFor();
   assert.equal(await page.getByLabel('Nome completo').inputValue(), 'Cliente Teste');
+  assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), []);
   await page.unroute('**/api/orcamento.php');
   await page.route('**/api/orcamento.php', async (route) => {
     const data = route.request().postDataJSON();
@@ -61,6 +67,17 @@ try {
   });
   await page.getByRole('button', { name: 'Enviar por Email' }).click();
   await page.getByRole('heading', { name: 'Pedido enviado!' }).waitFor();
+  assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), [
+    [
+      'event',
+      'conversion',
+      {
+        send_to: 'AW-18568226466/ZkgtCPGrgLYdEKLNgpZF',
+        value: 1,
+        currency: 'BRL',
+      },
+    ],
+  ]);
   console.log('Quote email success/failure and WhatsApp checks passed (mocked transport).');
 } finally {
   await browser.close();

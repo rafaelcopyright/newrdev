@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { reportQuoteConversion } from '../lib/analytics';
 import {
   ArrowRight,
   Check,
@@ -310,6 +311,7 @@ export default function QuotePage() {
       const result: { success?: boolean } = await response.json();
       if (!response.ok || result.success !== true) throw new Error('Falha no envio');
       setSubmitted(true);
+      reportQuoteConversion();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       setError(
