@@ -27,14 +27,14 @@ for (const path of routes) {
   const html = await readFile(`dist${path}index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
   const googleTag = document.querySelectorAll(
-    'head script[src="https://www.googletagmanager.com/gtm.js?id=AW-983887988"]',
+    'head script[src="https://www.googletagmanager.com/gtm.js?id=GTM-5VP68DMK"]',
   );
-  assert.equal(googleTag.length, 1, `Google Ads tag: ${path}`);
+  assert.equal(googleTag.length, 1, `Google tag: ${path}`);
   assert(googleTag[0].hasAttribute('async'));
-  const initialization = document.querySelector('#google-ads-init')?.textContent;
-  assert(initialization, `Google Ads initialization: ${path}`);
+  const initialization = document.querySelector('#google-tag-init')?.textContent;
+  assert(initialization, `Google tag initialization: ${path}`);
   const tagHash = createHash('sha256').update(initialization).digest('base64');
-  assert(apache.includes(`'sha256-${tagHash}'`), `Google Ads CSP hash: ${path}`);
+  assert(apache.includes(`'sha256-${tagHash}'`), `Google tag CSP hash: ${path}`);
   assert.equal(document.querySelectorAll('h1').length, 1, `H1: ${path}`);
   assert.equal(document.querySelectorAll('title').length, 1, `Title: ${path}`);
   assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);

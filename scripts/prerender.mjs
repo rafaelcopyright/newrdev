@@ -18,8 +18,8 @@ const routes = [
   ]),
 ];
 const template = await readFile('dist/index.html', 'utf8');
-const googleTagInit = template.match(/<script id="google-ads-init">([\s\S]*?)<\/script>/)?.[1];
-if (!googleTagInit) throw new Error('Google Ads initialization script is missing.');
+const googleTagInit = template.match(/<script id="google-tag-init">([\s\S]*?)<\/script>/)?.[1];
+if (!googleTagInit) throw new Error('Google tag initialization script is missing.');
 const googleTagHash = createHash('sha256').update(googleTagInit).digest('base64');
 for (const path of [...routes, '/404/']) {
   const { html, head } = await render(path);
