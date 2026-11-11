@@ -35,6 +35,12 @@ for (const path of routes) {
   assert(initialization, `Google tag initialization: ${path}`);
   const tagHash = createHash('sha256').update(initialization).digest('base64');
   assert(apache.includes(`'sha256-${tagHash}'`), `Google tag CSP hash: ${path}`);
+  const clarityScripts = document.querySelectorAll('head script#clarity-init');
+  assert.equal(clarityScripts.length, 1, `Clarity initialization: ${path}`);
+  const clarityInitialization = clarityScripts[0].textContent;
+  assert(clarityInitialization.includes('"zc0j7q1yzt"'), `Clarity project: ${path}`);
+  const clarityHash = createHash('sha256').update(clarityInitialization).digest('base64');
+  assert(apache.includes(`'sha256-${clarityHash}'`), `Clarity CSP hash: ${path}`);
   assert.equal(document.querySelectorAll('h1').length, 1, `H1: ${path}`);
   assert.equal(document.querySelectorAll('title').length, 1, `Title: ${path}`);
   assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);

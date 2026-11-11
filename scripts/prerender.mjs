@@ -21,6 +21,11 @@ const template = await readFile('dist/index.html', 'utf8');
 const googleTagInit = template.match(/<script id="google-tag-init">([\s\S]*?)<\/script>/)?.[1];
 if (!googleTagInit) throw new Error('Google tag initialization script is missing.');
 const googleTagHash = createHash('sha256').update(googleTagInit).digest('base64');
+const clarityInit = template.match(
+  /<script id="clarity-init" type="text\/javascript">([\s\S]*?)<\/script>/,
+)?.[1];
+if (!clarityInit) throw new Error('Clarity initialization script is missing.');
+const clarityHash = createHash('sha256').update(clarityInit).digest('base64');
 for (const path of [...routes, '/404/']) {
   const { html, head } = await render(path);
   const output = template.replace('<!--seo-head-->', head).replace('<!--app-html-->', html);
@@ -84,6 +89,7 @@ await writeFile(
   'dist/.htaccess',
   base
     .replace('#google-tag-hash', `sha256-${googleTagHash}`)
+    .replace('#clarity-hash', `sha256-${clarityHash}`)
     .replace('# migration-redirects', redirectRules + '\n' + queryRules)
     .replace('# canonical-redirects', canonicalRedirects)
     .replace('# environment-headers', indexingHeader),
