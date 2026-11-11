@@ -77,6 +77,7 @@ try {
         currency: 'BRL',
       },
     ],
+    ['event', 'conversion', { send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF' }],
   ]);
   console.log('Quote email success/failure and WhatsApp checks passed (mocked transport).');
 } finally {

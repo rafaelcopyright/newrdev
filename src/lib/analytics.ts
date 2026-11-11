@@ -1,7 +1,7 @@
 type ConversionParameters = {
   send_to: string;
-  value: number;
-  currency: string;
+  value?: number;
+  currency?: string;
 };
 
 type AnalyticsWindow = Window & {
@@ -14,6 +14,9 @@ export function reportQuoteConversion(): void {
       send_to: 'AW-18568226466/ZkgtCPGrgLYdEKLNgpZF',
       value: 1.0,
       currency: 'BRL',
+    });
+    (window as AnalyticsWindow).gtag?.('event', 'conversion', {
+      send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF',
     });
   } catch {
     // Analytics failures must not interrupt a successfully submitted quote.
