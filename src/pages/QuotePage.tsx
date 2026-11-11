@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   ArrowRight,
   Check,
@@ -13,12 +14,27 @@ import {
 
 type ProjectType = 'Site Simples' | 'Portal/Blog' | 'E-Commerce' | 'Sistema' | 'Consultoria';
 
-const projectTypes: { type: ProjectType; icon: typeof FileText; desc: string }[] = [
-  { type: 'Site Simples', icon: FileText, desc: 'Landing page ou site institucional' },
-  { type: 'Portal/Blog', icon: Newspaper, desc: 'Publicação de conteúdo em escala' },
-  { type: 'E-Commerce', icon: ShoppingCart, desc: 'Loja virtual com checkout' },
-  { type: 'Sistema', icon: Server, desc: 'Aplicação web sob medida' },
-  { type: 'Consultoria', icon: Lightbulb, desc: 'Diagnóstico e estratégia digital' },
+const projectTypes: { slug: string; type: ProjectType; icon: typeof FileText; desc: string }[] = [
+  {
+    slug: 'site-simples',
+    type: 'Site Simples',
+    icon: FileText,
+    desc: 'Landing page ou site institucional',
+  },
+  {
+    slug: 'portal-blog',
+    type: 'Portal/Blog',
+    icon: Newspaper,
+    desc: 'Publicação de conteúdo em escala',
+  },
+  { slug: 'e-commerce', type: 'E-Commerce', icon: ShoppingCart, desc: 'Loja virtual com checkout' },
+  { slug: 'sistema', type: 'Sistema', icon: Server, desc: 'Aplicação web sob medida' },
+  {
+    slug: 'consultoria',
+    type: 'Consultoria',
+    icon: Lightbulb,
+    desc: 'Diagnóstico e estratégia digital',
+  },
 ];
 
 type Field = {
@@ -238,11 +254,34 @@ const commonFields: Field[] = [
 ];
 
 export default function QuotePage() {
+  const [searchParams] = useSearchParams();
+  const projectFromUrl = projectTypes.find(
+    ({ slug }) => slug === searchParams.get('projeto'),
+  )?.type;
+  const detailsRef = useRef<HTMLFormElement>(null);
+  const pendingScroll = useRef(false);
   const [selected, setSelected] = useState<ProjectType | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    pendingScroll.current = Boolean(projectFromUrl);
+    if (projectFromUrl) {
+      setSelected(projectFromUrl);
+      setForm({});
+    }
+  }, [projectFromUrl]);
+
+  useEffect(() => {
+    if (!selected || !pendingScroll.current) return;
+    const frame = requestAnimationFrame(() => {
+      detailsRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      pendingScroll.current = false;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [selected, projectFromUrl]);
 
   const update = (name: string, value: string) => setForm((f) => ({ ...f, [name]: value }));
 
@@ -352,6 +391,7 @@ export default function QuotePage() {
             {projectTypes.map(({ type, icon: Icon, desc }, i) => (
               <button
                 key={type}
+                aria-pressed={selected === type}
                 onClick={() => {
                   setSelected(type);
                   setForm({});
@@ -384,7 +424,12 @@ export default function QuotePage() {
 
         {/* STEP 2: DYNAMIC FORM */}
         {selected && (
-          <form onSubmit={handleSubmit} className="animate-fade-up" aria-busy={sending}>
+          <form
+            ref={detailsRef}
+            onSubmit={handleSubmit}
+            className="animate-fade-up scroll-mt-24"
+            aria-busy={sending}
+          >
             <div className="hidden" aria-hidden="true">
               <label>
                 Website

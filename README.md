@@ -36,6 +36,10 @@ O formulário de orçamento envia JSON para `/api/orcamento.php`, incluído em `
 
 ## Verificação
 
+### Links para campanhas de orçamento
+
+O parâmetro `projeto` seleciona automaticamente o tipo e rola até o passo 2, mantendo os parâmetros de campanha (UTM). Use `/orcamento/?projeto=site-simples`, `?projeto=portal-blog`, `?projeto=e-commerce`, `?projeto=sistema` ou `?projeto=consultoria`. Sem esse parâmetro ou com valor inválido, a seleção continua manual. O visitante pode trocar o tipo normalmente.
+
 Com `preview:static` rodando em outro terminal:
 
 ```sh
