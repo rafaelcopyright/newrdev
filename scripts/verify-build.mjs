@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
 import { JSDOM } from 'jsdom';
+import { createHash } from 'node:crypto';
 import { siteConfig } from '../dist-ssr/entry-server.js';
 
 const origin = siteConfig.canonicalOrigin;
@@ -25,6 +26,15 @@ for (const { path } of legacy) assert(routes.includes(path), `Missing legacy URL
 for (const path of routes) {
   const html = await readFile(`dist${path}index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
+  const googleTag = document.querySelectorAll(
+    'head script[src="https://www.googletagmanager.com/gtm.js?id=AW-983887988"]',
+  );
+  assert.equal(googleTag.length, 1, `Google Ads tag: ${path}`);
+  assert(googleTag[0].hasAttribute('async'));
+  const initialization = document.querySelector('#google-ads-init')?.textContent;
+  assert(initialization, `Google Ads initialization: ${path}`);
+  const tagHash = createHash('sha256').update(initialization).digest('base64');
+  assert(apache.includes(`'sha256-${tagHash}'`), `Google Ads CSP hash: ${path}`);
   assert.equal(document.querySelectorAll('h1').length, 1, `H1: ${path}`);
   assert.equal(document.querySelectorAll('title').length, 1, `Title: ${path}`);
   assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);

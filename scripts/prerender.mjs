@@ -1,4 +1,5 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { render, siteConfig } from '../dist-ssr/entry-server.js';
 
 const origin = siteConfig.origin;
@@ -17,6 +18,9 @@ const routes = [
   ]),
 ];
 const template = await readFile('dist/index.html', 'utf8');
+const googleTagInit = template.match(/<script id="google-ads-init">([\s\S]*?)<\/script>/)?.[1];
+if (!googleTagInit) throw new Error('Google Ads initialization script is missing.');
+const googleTagHash = createHash('sha256').update(googleTagInit).digest('base64');
 for (const path of [...routes, '/404/']) {
   const { html, head } = await render(path);
   const output = template.replace('<!--seo-head-->', head).replace('<!--app-html-->', html);
@@ -79,6 +83,7 @@ const indexingHeader = siteConfig.indexable
 await writeFile(
   'dist/.htaccess',
   base
+    .replace('#google-tag-hash', `sha256-${googleTagHash}`)
     .replace('# migration-redirects', redirectRules + '\n' + queryRules)
     .replace('# canonical-redirects', canonicalRedirects)
     .replace('# environment-headers', indexingHeader),
