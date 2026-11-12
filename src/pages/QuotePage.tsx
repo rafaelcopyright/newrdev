@@ -368,20 +368,24 @@ export default function QuotePage() {
             Orçamento
           </p>
           <h1 className="font-display text-5xl sm:text-7xl mb-6 animate-fade-up delay-100">
-            Vamos construir
-            <br />
-            algo <span className="gradient-text">juntos</span>.
+            <a href="#tipo-de-projeto">
+              Vamos construir
+              <br />
+              algo <span className="gradient-text">juntos</span>.
+            </a>
           </h1>
           <p className="text-lg text-muted max-w-2xl mx-auto animate-fade-up delay-200">
-            Selecione o tipo de projeto e preencha o formulário. Os campos se ajustam para que eu
-            entenda exatamente o que você precisa.
+            <a href="#tipo-de-projeto">
+              Selecione o tipo de projeto e preencha o formulário. Os campos se ajustam para que eu
+              entenda exatamente o que você precisa.
+            </a>
           </p>
         </div>
       </section>
 
       <div className="max-w-3xl mx-auto px-6 lg:px-10 py-16">
         {/* STEP 1: TYPE SELECTION */}
-        <div className="mb-10">
+        <div id="tipo-de-projeto" className="mb-10 scroll-mt-24">
           <div className="flex items-center gap-3 mb-6">
             <span className="w-7 h-7 rounded-full bg-blue text-white text-sm font-medium flex items-center justify-center">
               1
