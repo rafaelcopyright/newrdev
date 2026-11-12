@@ -236,7 +236,7 @@ const fieldsByType: Record<ProjectType, Field[]> = {
 const commonFields: Field[] = [
   {
     name: 'name',
-    label: 'Nome completo',
+    label: 'Nome',
     type: 'text',
     placeholder: 'Seu nome',
     required: true,
@@ -250,8 +250,13 @@ const commonFields: Field[] = [
     required: true,
     half: true,
   },
-  { name: 'company', label: 'Empresa', type: 'text', placeholder: 'Opcional', half: true },
-  { name: 'phone', label: 'Telefone', type: 'tel', placeholder: '(11) 90000-0000', half: true },
+  {
+    name: 'phone',
+    label: 'WhatsApp (opcional)',
+    type: 'tel',
+    placeholder: '(11) 90000-0000',
+    half: true,
+  },
 ];
 
 export default function QuotePage() {
@@ -293,6 +298,7 @@ export default function QuotePage() {
     setError('');
     const fields = [
       ...commonFields,
+      { name: 'company', label: 'Empresa' },
       ...fieldsByType[selected],
       { name: 'message', label: 'Mensagem' },
     ];
@@ -325,7 +331,12 @@ export default function QuotePage() {
   const whatsappMessage = selected
     ? [
         'Olá! Gostaria de um orçamento para ' + selected + '.',
-        ...[...commonFields, ...fieldsByType[selected], { name: 'message', label: 'Mensagem' }]
+        ...[
+          ...commonFields,
+          { name: 'company', label: 'Empresa' },
+          ...fieldsByType[selected],
+          { name: 'message', label: 'Mensagem' },
+        ]
           .filter(({ name }) => form[name]?.trim())
           .map(({ name, label }) => label + ': ' + form[name]),
       ].join('\n')
@@ -363,7 +374,7 @@ export default function QuotePage() {
       <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 grid-bg" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue/15 rounded-full blur-[120px]" />
-        <div className="relative max-w-4xl mx-auto px-6 lg:px-10 py-24 text-center">
+        <div className="relative max-w-4xl mx-auto px-6 lg:px-10 py-10 sm:py-24 text-center">
           <p className="text-xs uppercase tracking-widest text-blue-bright mb-4 animate-fade-up">
             Orçamento
           </p>
@@ -376,14 +387,14 @@ export default function QuotePage() {
           </h1>
           <p className="text-lg text-muted max-w-2xl mx-auto animate-fade-up delay-200">
             <a href="#tipo-de-projeto">
-              Selecione o tipo de projeto e preencha o formulário. Os campos se ajustam para que eu
-              entenda exatamente o que você precisa.
+              Escolha o tipo de projeto e deixe seu contato. Podemos definir os detalhes juntos, sem
+              compromisso.
             </a>
           </p>
         </div>
       </section>
 
-      <div className="max-w-3xl mx-auto px-6 lg:px-10 py-16">
+      <div className="max-w-3xl mx-auto px-6 lg:px-10 py-8 sm:py-16">
         {/* STEP 1: TYPE SELECTION */}
         <div id="tipo-de-projeto" className="mb-10 scroll-mt-24">
           <div className="flex items-center gap-3 mb-6">
@@ -400,7 +411,6 @@ export default function QuotePage() {
                 aria-pressed={selected === type}
                 onClick={() => {
                   setSelected(type);
-                  setForm({});
                 }}
                 className={`group flex items-start gap-4 p-5 rounded-2xl border text-left transition-all duration-400 animate-fade-up ${
                   selected === type
@@ -447,7 +457,7 @@ export default function QuotePage() {
                 <span className="w-7 h-7 rounded-full bg-blue text-white text-sm font-medium flex items-center justify-center">
                   2
                 </span>
-                <h2 className="font-display-md text-2xl">Detalhes do projeto</h2>
+                <h2 className="font-display-md text-2xl">Solicite seu orçamento</h2>
               </div>
 
               <div className="rounded-2xl border border-border bg-bg-elev p-6 sm:p-8 space-y-5">
@@ -463,37 +473,43 @@ export default function QuotePage() {
                   ))}
                 </div>
 
-                <div className="border-t border-border pt-5">
-                  <p className="text-xs uppercase tracking-widest text-blue-bright mb-4">
-                    Específico · {selected}
-                  </p>
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    {fieldsByType[selected].map((f) => (
-                      <FieldInput
-                        key={f.name}
-                        field={f}
-                        value={form[f.name] ?? ''}
-                        onChange={(v) => update(f.name, v)}
-                        full={!f.half}
-                      />
-                    ))}
-                  </div>
-                </div>
-
                 {/* Optional message */}
                 <div className="border-t border-border pt-5">
                   <FieldInput
                     field={{
                       name: 'message',
-                      label: 'Algo mais?',
+                      label: 'O que você precisa? (opcional)',
                       type: 'textarea',
-                      placeholder: 'Compartilhe qualquer detalhe extra que ache relevante...',
+                      placeholder:
+                        'Conte sua ideia ou o problema que quer resolver. Não precisa ter tudo definido.',
                     }}
                     value={form.message ?? ''}
                     onChange={(v) => update('message', v)}
                     full
                   />
                 </div>
+                <details className="border-t border-border pt-5">
+                  <summary className="cursor-pointer text-sm font-medium text-blue-bright py-2">
+                    Adicionar detalhes (opcional)
+                  </summary>
+                  <div className="grid sm:grid-cols-2 gap-5 mt-4">
+                    <FieldInput
+                      field={{ name: 'company', label: 'Empresa (opcional)', type: 'text' }}
+                      value={form.company ?? ''}
+                      onChange={(v) => update('company', v)}
+                      full
+                    />
+                    {fieldsByType[selected].map((f) => (
+                      <FieldInput
+                        key={f.name}
+                        field={{ ...f, required: false }}
+                        value={form[f.name] ?? ''}
+                        onChange={(v) => update(f.name, v)}
+                        full={!f.half}
+                      />
+                    ))}
+                  </div>
+                </details>
               </div>
             </fieldset>
             {error && (
@@ -507,7 +523,7 @@ export default function QuotePage() {
                 type="submit"
                 className="group mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-blue text-white font-medium hover:bg-blue/90 transition-all duration-300"
               >
-                {sending ? 'Enviando...' : 'Enviar por Email'}
+                {sending ? 'Enviando...' : 'Solicitar orçamento'}
                 <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
@@ -517,7 +533,7 @@ export default function QuotePage() {
                 rel="noopener noreferrer"
                 className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl border border-border text-text font-medium hover:border-blue/40 transition-colors"
               >
-                Chame no WhatsApp
+                Prefiro conversar no WhatsApp
               </a>
             </div>
 
@@ -550,7 +566,7 @@ function FieldInput({
   full?: boolean;
 }) {
   const base =
-    'w-full px-4 py-3 rounded-xl bg-bg border border-border text-text placeholder:text-muted/60 focus:outline-none focus:border-blue/50 focus:ring-1 focus:ring-blue/20 transition-all duration-300 text-sm';
+    'w-full px-4 py-3 rounded-xl bg-bg border border-border text-text placeholder:text-muted/60 focus:outline-none focus:border-blue/50 focus:ring-1 focus:ring-blue/20 transition-all duration-300 text-base';
   const width = full ? 'sm:col-span-2' : '';
 
   return (
@@ -584,6 +600,10 @@ function FieldInput({
         </select>
       ) : (
         <input
+          name={field.name}
+          autoComplete={
+            { name: 'name', email: 'email', phone: 'tel', company: 'organization' }[field.name]
+          }
           type={field.type}
           placeholder={field.placeholder}
           value={value}
