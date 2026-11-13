@@ -1,6 +1,9 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react';
 
-const loaders = import.meta.glob<{ default: string }>('../../content/bodies/*.json');
+const loaders = import.meta.glob<{ default: string }>([
+  '../../content/bodies/*.json',
+  '!../../content/bodies/sobre.json',
+]);
 const components = new Map<string, LazyExoticComponent<ComponentType>>();
 
 function getBody(id: string) {

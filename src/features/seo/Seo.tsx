@@ -4,8 +4,14 @@ import type { ContentEntry } from '@/data';
 import { siteConfig } from '@/config/site';
 
 const origin = siteConfig.canonicalOrigin;
-type Props = { title: string; description: string; entry?: ContentEntry; noindex?: boolean };
-export default function Seo({ title, description, entry, noindex = false }: Props) {
+type Props = {
+  title: string;
+  description: string;
+  entry?: ContentEntry;
+  noindex?: boolean;
+  structuredData?: Record<string, unknown>;
+};
+export default function Seo({ title, description, entry, noindex = false, structuredData }: Props) {
   const { pathname } = useLocation();
   const canonical = origin + pathname;
   const image = siteConfig.origin + (entry?.image || '/social.png');
@@ -58,7 +64,9 @@ export default function Seo({ title, description, entry, noindex = false }: Prop
         <meta property="article:published_time" content={entry.published} />
       )}
       {entry?.kind === 'post' && <meta property="article:modified_time" content={entry.modified} />}
-      <script type="application/ld+json">{JSON.stringify(schema).replace(/</g, '\\u003c')}</script>
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData ?? schema).replace(/</g, '\\u003c')}
+      </script>
       {entry && (
         <script type="application/ld+json">
           {JSON.stringify({

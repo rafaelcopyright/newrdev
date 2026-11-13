@@ -59,7 +59,7 @@ for (const path of routes) {
   );
   assert(!html.includes('<!--app-html-->'));
   const content = entries.find((entry) => entry.path === path);
-  if (content && path !== '/portfolio-de-sites/')
+  if (content && !['/portfolio-de-sites/', '/sobre/'].includes(path))
     assert(
       document.querySelector('.article-body').textContent.length > 30,
       `Missing static content: ${path}`,

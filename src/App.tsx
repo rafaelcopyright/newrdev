@@ -12,6 +12,7 @@ import Seo from '@/features/seo/Seo';
 import { entries, archives } from '@/data';
 import CampaignLandingPage from '@/features/campaigns/CampaignLandingPage';
 import { campaigns } from '@/features/campaigns/campaigns';
+import AboutPage from '@/features/about/AboutPage';
 
 export default function App() {
   const { pathname } = useLocation();
@@ -49,6 +50,7 @@ export default function App() {
             }
           />
           <Route path="/blog/" element={<BlogPage />} />
+          <Route path="/sobre/" element={<AboutPage />} />
           <Route
             path="/portfolio-de-sites/"
             element={
@@ -75,7 +77,7 @@ export default function App() {
             }
           />
           {entries
-            .filter((entry) => entry.path !== '/portfolio-de-sites/')
+            .filter((entry) => !['/portfolio-de-sites/', '/sobre/'].includes(entry.path))
             .map((entry) => (
               <Route key={entry.path} path={entry.path} element={<ContentPage entry={entry} />} />
             ))}
