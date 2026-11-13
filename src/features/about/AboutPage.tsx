@@ -127,21 +127,32 @@ export default function AboutPage() {
           aria-labelledby="award-title"
         >
           <figure>
-            <img
-              src="/media/premio-abc-2023-equipe.webp"
-              srcSet="/media/premio-abc-2023-equipe-480.webp 480w, /media/premio-abc-2023-equipe.webp 828w"
-              sizes="(max-width: 600px) calc(100vw - 40px), 50vw"
-              width="828"
-              height="552"
-              loading="lazy"
-              decoding="async"
-              alt="Equipe da agência WB.P reunida com o troféu de bronze do Prêmio ABC 2023"
-            />
+            <div className="about-award-photos">
+              <img
+                src="/media/premio-abc-2023-equipe.webp"
+                srcSet="/media/premio-abc-2023-equipe-480.webp 480w, /media/premio-abc-2023-equipe.webp 828w"
+                sizes="(max-width: 600px) calc(100vw - 40px), 50vw"
+                width="828"
+                height="552"
+                loading="lazy"
+                decoding="async"
+                alt="Equipe da agência WB.P reunida com o troféu de bronze do Prêmio ABC 2023"
+              />
+              <img
+                className="about-award-trophies"
+                src="/media/premio-abc-2023-trofeus.webp"
+                width="480"
+                height="320"
+                loading="lazy"
+                decoding="async"
+                alt="Troféus conquistados pela agência WB.P no Prêmio ABC 2023"
+              />
+            </div>
             <figcaption>Uma conquista em equipe na agência WB.P (Webfoco + Pippe).</figcaption>
           </figure>
           <div>
             <p className="about-eyebrow">Reconhecimento · Prêmio ABC 2023</p>
-            <h2 id="award-title">Bronze em desenvolvimento web.</h2>
+            <h2 id="award-title">Prêmio em Projeto de SEO</h2>
             <p>
               Na agência WB.P, participei de um projeto de SEO e otimização de site que conquistou o
               bronze em Melhor Desenvolvimento Web no Prêmio ABC 2023, com destaque para a

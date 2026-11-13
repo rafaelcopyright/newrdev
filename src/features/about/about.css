@@ -417,6 +417,24 @@
   height: auto;
   border-radius: 14px;
 }
+.about-award-photos {
+  position: relative;
+  aspect-ratio: 3 / 2;
+}
+.about-award-photos > img:first-child {
+  height: 100%;
+  object-fit: cover;
+}
+.about-award-photos .about-award-trophies {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 36%;
+  height: auto;
+  border: 3px solid var(--bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px #0006;
+}
 .about-award figcaption {
   margin-top: 12px;
   color: var(--text-muted);
