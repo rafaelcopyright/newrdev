@@ -52,7 +52,7 @@ export default function AboutPage() {
               name: 'Rafael Almeida dos Reis',
               jobTitle: 'Desenvolvedor web',
               url: origin + '/sobre/',
-              image: origin + '/media/139c3694eaa24583.webp',
+              image: origin + '/media/rafael-reis-perfil.webp',
               sameAs: [linkedin],
               knowsAbout: [
                 'Desenvolvimento web',
@@ -93,9 +93,9 @@ export default function AboutPage() {
           </div>
           <aside className="about-profile" aria-label="Perfil profissional">
             <img
-              src="/media/139c3694eaa24583.webp"
-              width="320"
-              height="320"
+              src="/media/rafael-reis-perfil.webp"
+              width="400"
+              height="400"
               alt="Rafael Almeida dos Reis"
               {...{ fetchpriority: 'high' }}
             />
