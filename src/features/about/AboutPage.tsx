@@ -328,20 +328,32 @@ export default function AboutPage() {
                 </Link>
               </div>
             </article>
-            <article className="about-personal">
-              <span className="about-number">Projeto pessoal · IA e conteúdo</span>
-              <h3>Oráculo Neural</h3>
-              <p>
-                Portal desenvolvido para explorar a integração de PHP, banco de dados e APIs de
-                modelos de linguagem na geração dinâmica de conteúdo.
-              </p>
-              <p>
-                Um espaço para experimentar prompts, consumo de APIs e a conexão entre a interface e
-                o processamento dos dados.
-              </p>
-              <a href="https://oraculoneural.com.br/" target="_blank" rel="noopener noreferrer">
-                Visitar o Oráculo Neural <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
+            <article>
+              <img
+                src="/media/oraculo-neural.webp"
+                srcSet="/media/oraculo-neural-480.webp 480w, /media/oraculo-neural-768.webp 768w, /media/oraculo-neural.webp 1200w"
+                sizes="(max-width: 600px) calc(100vw - 40px), 50vw"
+                width="1200"
+                height="675"
+                loading="lazy"
+                decoding="async"
+                alt="Oráculo Neural: portal de astrologia com horóscopos e seleção de signos"
+              />
+              <div>
+                <span className="about-number">Projeto pessoal · IA e conteúdo</span>
+                <h3>Oráculo Neural</h3>
+                <p>
+                  Portal desenvolvido para explorar a integração de PHP, banco de dados e APIs de
+                  modelos de linguagem na geração dinâmica de conteúdo.
+                </p>
+                <p>
+                  Um espaço para experimentar prompts, consumo de APIs e a conexão entre a interface
+                  e o processamento dos dados.
+                </p>
+                <a href="https://oraculoneural.com.br/" target="_blank" rel="noopener noreferrer">
+                  Visitar o Oráculo Neural <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+              </div>
             </article>
           </div>
         </section>
