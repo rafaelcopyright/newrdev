@@ -43,9 +43,11 @@ export function reportQuoteConversion(campaign?: string): void {
       value: 1.0,
       currency: 'BRL',
     });
-    (window as AnalyticsWindow).gtag?.('event', 'conversion', {
-      send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF',
-    });
+    if (campaign === 'sistemas') {
+      (window as AnalyticsWindow).gtag?.('event', 'conversion', {
+        send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF',
+      });
+    }
   } catch {
     // Analytics failures must not interrupt a successfully submitted quote.
   }

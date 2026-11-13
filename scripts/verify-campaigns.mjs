@@ -115,6 +115,13 @@ try {
         ),
       );
       success = true;
+      assert(
+        !(await page.evaluate(() => window.campaignAnalytics)).some(
+          (args) =>
+            args[1] === 'conversion' && args[2]?.send_to === 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF',
+        ),
+        'Google Ads Sistemas conversion on failed submission',
+      );
       assert.deepEqual(
         await page.evaluate(() => window.openaiConversions),
         [],
@@ -136,6 +143,14 @@ try {
       assert.equal(payload.details.length, 4);
       assert(payload.details.some((field) => field.value === path));
       const analytics = await page.evaluate(() => window.campaignAnalytics);
+      assert.equal(
+        analytics.filter(
+          (args) =>
+            args[1] === 'conversion' && args[2]?.send_to === 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF',
+        ).length,
+        campaign === 'sistemas' ? 1 : 0,
+        'Google Ads Sistemas conversion must fire once and only for Sistemas',
+      );
       const leads = analytics.filter((args) => args[1] === 'generate_lead');
       assert.equal(leads.length, 1);
       assert.equal(leads[0][2].landing_campaign, campaign);
