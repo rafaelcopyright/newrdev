@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { reportQuoteConversion } from '../lib/analytics';
+import { createQuoteId, getQuoteSessionId, reportQuoteEvent } from '../lib/quoteTelemetry';
+import { useQuoteDiagnostics } from '../lib/useQuoteDiagnostics';
 import {
   ArrowRight,
   Check,
@@ -271,6 +273,8 @@ export default function QuotePage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState<Record<string, string>>({});
+  const projectSlug = projectTypes.find(({ type }) => type === selected)?.slug;
+  const diagnostics = useQuoteDiagnostics(projectSlug);
 
   useEffect(() => {
     pendingScroll.current = Boolean(projectFromUrl);
@@ -289,13 +293,20 @@ export default function QuotePage() {
     return () => cancelAnimationFrame(frame);
   }, [selected, projectFromUrl]);
 
-  const update = (name: string, value: string) => setForm((f) => ({ ...f, [name]: value }));
+  const update = (name: string, value: string) => {
+    diagnostics.fieldChanged(name, value);
+    setForm((f) => ({ ...f, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!selected || sending) return;
     setSending(true);
     setError('');
+    const requestId = createQuoteId();
+    let status: number | undefined;
+    let failure = 'network';
+    reportQuoteEvent('quote_submit_attempt', { project: projectSlug, request_id: requestId });
     const fields = [
       ...commonFields,
       { name: 'company', label: 'Empresa' },
@@ -308,18 +319,41 @@ export default function QuotePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           project: selected,
+          session_id: getQuoteSessionId(),
+          request_id: requestId,
           email: form.email,
           website: new FormData(e.currentTarget).get('website'),
           details: fields.map(({ name, label }) => ({ label, value: form[name] ?? '' })),
         }),
         signal: AbortSignal.timeout(20000),
       });
+      status = response.status;
+      if (!response.ok) {
+        failure = 'http';
+        throw new Error('Falha HTTP');
+      }
+      failure = 'invalid_response';
       const result: { success?: boolean } = await response.json();
-      if (!response.ok || result.success !== true) throw new Error('Falha no envio');
+      if (result?.success !== true) {
+        failure = 'rejected';
+        throw new Error('Falha no envio');
+      }
+      reportQuoteEvent('quote_submit_success', {
+        project: projectSlug,
+        request_id: requestId,
+        status,
+      });
       setSubmitted(true);
       reportQuoteConversion();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch {
+    } catch (cause) {
+      reportQuoteEvent('quote_submit_error', {
+        project: projectSlug,
+        request_id: requestId,
+        status,
+        reason:
+          cause instanceof DOMException && cause.name === 'TimeoutError' ? 'timeout' : failure,
+      });
       setError(
         'Não foi possível confirmar o envio. Tente novamente ou entre em contato pelo contato@rafaeldev.com.br.',
       );
@@ -410,6 +444,9 @@ export default function QuotePage() {
                 key={type}
                 aria-pressed={selected === type}
                 onClick={() => {
+                  reportQuoteEvent('quote_project_selected', {
+                    project: projectTypes.find((project) => project.type === type)?.slug,
+                  });
                   setSelected(type);
                 }}
                 className={`group flex items-start gap-4 p-5 rounded-2xl border text-left transition-all duration-400 animate-fade-up ${
@@ -443,6 +480,7 @@ export default function QuotePage() {
           <form
             ref={detailsRef}
             onSubmit={handleSubmit}
+            onInvalidCapture={diagnostics.invalid}
             className="animate-fade-up scroll-mt-24"
             aria-busy={sending}
           >
@@ -521,6 +559,7 @@ export default function QuotePage() {
               <button
                 disabled={sending}
                 type="submit"
+                onClick={() => reportQuoteEvent('quote_submit_click', { project: projectSlug })}
                 className="group mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-blue text-white font-medium hover:bg-blue/90 transition-all duration-300"
               >
                 {sending ? 'Enviando...' : 'Solicitar orçamento'}
@@ -530,6 +569,7 @@ export default function QuotePage() {
               <a
                 href={'https://wa.me/5511969005617?text=' + encodeURIComponent(whatsappMessage)}
                 target="_blank"
+                onClick={() => reportQuoteEvent('quote_whatsapp_click', { project: projectSlug })}
                 rel="noopener noreferrer"
                 className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl border border-border text-text font-medium hover:border-blue/40 transition-colors"
               >
@@ -577,6 +617,7 @@ function FieldInput({
       </span>
       {field.type === 'textarea' ? (
         <textarea
+          name={field.name}
           rows={3}
           placeholder={field.placeholder}
           value={value}
@@ -586,6 +627,7 @@ function FieldInput({
         />
       ) : field.type === 'select' ? (
         <select
+          name={field.name}
           value={value}
           required={field.required}
           onChange={(e) => onChange(e.target.value)}

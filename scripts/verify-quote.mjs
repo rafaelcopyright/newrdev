@@ -4,6 +4,10 @@ import { chromium, expect } from '@playwright/test';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.route('**/*', (route) =>
+    new URL(route.request().url()).hostname === '127.0.0.1' ? route.continue() : route.abort(),
+  );
+  await page.route('**/api/quote-events.php', (route) => route.fulfill({ status: 204 }));
   for (const viewport of [
     { width: 390, height: 844 },
     { width: 1440, height: 1000 },
@@ -21,11 +25,12 @@ try {
         'aria-pressed',
         'true',
       );
-      await expect(page.getByLabel(field)).toBeVisible();
       await expect
         .poll(async () => (await page.locator('form').boundingBox()).y)
         .toBeGreaterThanOrEqual(64);
       await expect.poll(async () => (await page.locator('form').boundingBox()).y).toBeLessThan(120);
+      await page.getByText('Adicionar detalhes (opcional)', { exact: true }).click();
+      await expect(page.getByLabel(field)).toBeVisible();
       assert.match(page.url(), /utm_source=teste/);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/orcamento\/$/);
     }
@@ -37,14 +42,15 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('http://127.0.0.1:4173/orcamento/');
   await page.getByRole('button', { name: /Site Simples/ }).click();
-  await page.getByLabel('Nome completo').fill('Cliente Teste');
+  await page.getByLabel(/^Nome/).fill('Cliente Teste');
   await page.getByLabel('Email', { exact: false }).fill('cliente@example.com');
+  await page.getByText('Adicionar detalhes (opcional)', { exact: true }).click();
   await page.getByLabel('Número de páginas').fill('4');
   const whatsapp = new URL(
-    await page.getByRole('link', { name: 'Chame no WhatsApp' }).getAttribute('href'),
+    await page.getByRole('link', { name: 'Prefiro conversar no WhatsApp' }).getAttribute('href'),
   );
   assert.equal(whatsapp.pathname, '/5511969005617');
-  assert.match(whatsapp.searchParams.get('text'), /Nome completo: Cliente Teste/);
+  assert.match(whatsapp.searchParams.get('text'), /Nome: Cliente Teste/);
   assert.match(whatsapp.searchParams.get('text'), /Número de páginas: 4/);
   await page.evaluate(() => {
     window.quoteConversionEvents = [];
@@ -53,9 +59,9 @@ try {
   await page.route('**/api/orcamento.php', (route) =>
     route.fulfill({ status: 503, json: { success: false } }),
   );
-  await page.getByRole('button', { name: 'Enviar por Email' }).click();
+  await page.getByRole('button', { name: 'Solicitar orçamento' }).click();
   await page.getByRole('alert').waitFor();
-  assert.equal(await page.getByLabel('Nome completo').inputValue(), 'Cliente Teste');
+  assert.equal(await page.getByLabel(/^Nome/).inputValue(), 'Cliente Teste');
   assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), []);
   await page.unroute('**/api/orcamento.php');
   await page.route('**/api/orcamento.php', async (route) => {
@@ -65,7 +71,7 @@ try {
     assert.equal(data.project, 'Site Simples');
     await route.fulfill({ json: { success: true } });
   });
-  await page.getByRole('button', { name: 'Enviar por Email' }).click();
+  await page.getByRole('button', { name: 'Solicitar orçamento' }).click();
   await page.getByRole('heading', { name: 'Pedido enviado!' }).waitFor();
   assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), [
     [

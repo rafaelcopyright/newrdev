@@ -7,12 +7,12 @@ RewriteEngine On
 # canonical-redirects
 # migration-redirects
 RewriteRule ^(?:wp-admin|wp-includes)(?:/|$) - [R=404,L]
-RewriteRule ^api/orcamento\.php$ - [END]
+RewriteRule ^api/(?:orcamento|quote-events)\.php$ - [END]
 RewriteRule \.php(?:/|$) - [R=404,L,NC]
 # Existing directories supply prerendered HTML. Unknown routes retain HTTP 404.
 </IfModule>
 
-<FilesMatch "(^\.|\.(env|log|ini|bak|sql|tsx?|mjs|lock)$)">
+<FilesMatch "(^\.|^error_log(?:\..*)?$|\.(env|log|ini|bak|sql|tsx?|mjs|lock)$)">
 Require all denied
 </FilesMatch>
 
