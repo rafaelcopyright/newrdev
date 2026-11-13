@@ -1,3 +1,5 @@
+import { reportAnalyticsEvent } from './analytics';
+
 export type QuoteEvent =
   | 'quote_view'
   | 'quote_project_selected'
@@ -51,6 +53,13 @@ export function getQuoteSessionId(): string {
 
 // Only machine-defined metadata belongs here. Never pass values, labels, URLs or error messages.
 export function reportQuoteEvent(event: QuoteEvent, context: QuoteContext = {}): void {
+  const parameters: Record<string, string | number> = { form_name: 'orcamento' };
+  for (const key of ['project', 'field', 'reason', 'status'] as const) {
+    const value = context[key];
+    if (value !== undefined) parameters[key] = value;
+  }
+  // Session/request IDs and field values stay out of GA4.
+  reportAnalyticsEvent(event, parameters);
   try {
     void fetch('/api/quote-events.php', {
       method: 'POST',

@@ -567,9 +567,17 @@ export default function QuotePage() {
               </button>
 
               <a
-                href={'https://wa.me/5511969005617?text=' + encodeURIComponent(whatsappMessage)}
+                href="https://wa.me/5511969005617"
                 target="_blank"
-                onClick={() => reportQuoteEvent('quote_whatsapp_click', { project: projectSlug })}
+                onClick={(event) => {
+                  event.preventDefault();
+                  reportQuoteEvent('quote_whatsapp_click', { project: projectSlug });
+                  window.open(
+                    'https://wa.me/5511969005617?text=' + encodeURIComponent(whatsappMessage),
+                    '_blank',
+                    'noopener,noreferrer',
+                  );
+                }}
                 rel="noopener noreferrer"
                 className="mt-6 w-full inline-flex items-center justify-center px-6 py-4 rounded-xl border border-border text-text font-medium hover:border-blue/40 transition-colors"
               >

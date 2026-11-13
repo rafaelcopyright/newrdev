@@ -2,6 +2,22 @@
 
 Os registros começam depois da publicação desta versão; não recuperam cliques antigos.
 
+## Google Analytics 4
+
+O site configura diretamente `G-3B3ZY6JK8E` em `index.html`, preservando o contêiner de Ads existente. A política CSP permite os endpoints de coleta do Analytics. Não adicione outra tag GA4 para esse mesmo destino no GTM: isso pode duplicar visualizações.
+
+As visualizações usam o envio inicial da tag e a medição otimizada de mudanças no histórico, já habilitada no fluxo da propriedade. Não há um segundo disparo manual na aplicação. `scripts/verify-ga4.mjs` carrega a configuração real do Google e verifica cinco visualizações (início, blog, orçamento, voltar e avançar), sem duplicação no cenário testado. O Google pode agrupar e atrasar requisições; o teste aguarda a coleta. Não desative a medição por histórico nem adicione outro `page_view` manual sem ajustar e repetir esse teste.
+
+Todos os eventos `quote_*` da tabela abaixo são enviados explicitamente para o GA4, com `form_name`, projeto, campo, categoria de erro e status quando aplicável. IDs de sessão/requisição e valores dos campos não são enviados por estes eventos. A propriedade pode ter regras automáticas de coleta configuradas na conta; revise-as separadamente.
+
+`generate_lead` é emitido uma vez após resposta de sucesso da API. Clique no WhatsApp, validação e resposta de erro não geram esse evento. Ações de conversão Ads existentes foram preservadas. Não some eventos automáticos `form_submit`, `quote_submit_success`, `generate_lead` e ações Ads como contatos distintos.
+
+Na propriedade, marque **`generate_lead` como evento principal** em Administrador → Eventos. Essa marcação é configuração administrativa, não é feita pelo código do site. O acesso à propriedade foi confirmado, mas a alteração administrativa não foi feita porque o controle do navegador foi interrompido pelo usuário. Revise também as duas ações Ads existentes antes de importar outra conversão primária do GA4.
+
+O link visível do WhatsApp tem apenas o destino, sem texto preenchido. A mensagem é composta ao abrir a conversa, evitando que a coleta automática de `link_url` capture dados do formulário. O teste de WhatsApp confirma que a mensagem continua sendo preenchida.
+
+Para reproduzir a validação de GA4 com o preview estático em execução: `node scripts/verify-ga4.mjs`. A coleta é interceptada, portanto nenhum lead de teste é entregue ao Google. Para testar a versão publicada, defina `PREVIEW_URL=https://rafaeldev.com.br` antes do comando; a API de envio e os eventos PHP continuam simulados nesse teste.
+
 ## Consulta rápida no Clarity
 
 Abra o projeto Rafael.dev → Dashboard / Smart events ou Recordings → Filters → Smart events e procure os eventos abaixo. A API oficial usada é `clarity('event', nome)`; filtros adicionais usam `quote_project`, `quote_field`, `quote_reason` e `quote_http_status`. As tags são de sessão e podem acumular valores; para relacionar precisamente um erro a uma tentativa, use o log do servidor.

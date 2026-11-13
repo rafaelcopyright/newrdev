@@ -15,6 +15,7 @@ try {
     await page.addInitScript(() => {
       window.diagnosticEvents = [];
       window.clarity = (...args) => window.diagnosticEvents.push(args);
+      window.open = () => null;
     });
     await page.route('**/api/quote-events.php', async (route) => {
       events.push(route.request().postDataJSON());
@@ -32,6 +33,10 @@ try {
     const count = (event) => events.filter((item) => item.event === event).length;
     const submit = page.getByRole('button', { name: 'Solicitar orçamento', exact: true });
     await page.goto('http://127.0.0.1:4173/orcamento/');
+    await page.evaluate(() => {
+      window.auditAnalytics = [];
+      window.gtag = (...args) => window.auditAnalytics.push(args);
+    });
     await page.getByRole('button', { name: /Site Simples/ }).click();
     await submit.click();
     await expect.poll(() => count('quote_validation_error')).toBe(2);
@@ -91,6 +96,15 @@ try {
     assert(clarity.some((args) => args[0] === 'event' && args[1] === 'quote_form_start'));
     assert(!JSON.stringify(clarity).includes('privado'));
     assert(!JSON.stringify(clarity).includes(events[0].session_id));
+    const analytics = await page.evaluate(() => window.auditAnalytics);
+    assert.equal(analytics.filter((args) => args[1] === 'generate_lead').length, 1);
+    assert(analytics.some((args) => args[1] === 'quote_validation_error'));
+    assert(!JSON.stringify(analytics).includes('privado'));
+    assert(!JSON.stringify(analytics).includes(events[0].session_id));
+    for (const args of analytics.filter((args) => args[1] !== 'conversion')) {
+      assert.equal(args[2].send_to, 'G-3B3ZY6JK8E');
+      assert(!('request_id' in args[2]));
+    }
     // Blocked analytics, storage and diagnostic transport must not block a real submission.
     await page.addInitScript(() => {
       Object.defineProperty(window, 'sessionStorage', {

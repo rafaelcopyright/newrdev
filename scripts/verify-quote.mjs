@@ -46,9 +46,16 @@ try {
   await page.getByLabel('Email', { exact: false }).fill('cliente@example.com');
   await page.getByText('Adicionar detalhes (opcional)', { exact: true }).click();
   await page.getByLabel('Número de páginas').fill('4');
-  const whatsapp = new URL(
-    await page.getByRole('link', { name: 'Prefiro conversar no WhatsApp' }).getAttribute('href'),
-  );
+  const whatsappLink = page.getByRole('link', { name: 'Prefiro conversar no WhatsApp' });
+  assert.equal(await whatsappLink.getAttribute('href'), 'https://wa.me/5511969005617');
+  await page.evaluate(() => {
+    window.open = (url) => {
+      window.testWhatsAppUrl = url;
+      return null;
+    };
+  });
+  await whatsappLink.click();
+  const whatsapp = new URL(await page.evaluate(() => window.testWhatsAppUrl));
   assert.equal(whatsapp.pathname, '/5511969005617');
   assert.match(whatsapp.searchParams.get('text'), /Nome: Cliente Teste/);
   assert.match(whatsapp.searchParams.get('text'), /Número de páginas: 4/);
@@ -62,7 +69,14 @@ try {
   await page.getByRole('button', { name: 'Solicitar orçamento' }).click();
   await page.getByRole('alert').waitFor();
   assert.equal(await page.getByLabel(/^Nome/).inputValue(), 'Cliente Teste');
-  assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), []);
+  assert.deepEqual(
+    await page.evaluate(() =>
+      window.quoteConversionEvents.filter((args) =>
+        ['conversion', 'generate_lead'].includes(args[1]),
+      ),
+    ),
+    [],
+  );
   await page.unroute('**/api/orcamento.php');
   await page.route('**/api/orcamento.php', async (route) => {
     const data = route.request().postDataJSON();
@@ -73,18 +87,23 @@ try {
   });
   await page.getByRole('button', { name: 'Solicitar orçamento' }).click();
   await page.getByRole('heading', { name: 'Pedido enviado!' }).waitFor();
-  assert.deepEqual(await page.evaluate(() => window.quoteConversionEvents), [
+  const recorded = await page.evaluate(() => window.quoteConversionEvents);
+  assert.equal(recorded.filter((args) => args[1] === 'generate_lead').length, 1);
+  assert.deepEqual(
+    recorded.filter((args) => args[1] === 'conversion'),
     [
-      'event',
-      'conversion',
-      {
-        send_to: 'AW-18568226466/ZkgtCPGrgLYdEKLNgpZF',
-        value: 1,
-        currency: 'BRL',
-      },
+      [
+        'event',
+        'conversion',
+        {
+          send_to: 'AW-18568226466/ZkgtCPGrgLYdEKLNgpZF',
+          value: 1,
+          currency: 'BRL',
+        },
+      ],
+      ['event', 'conversion', { send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF' }],
     ],
-    ['event', 'conversion', { send_to: 'AW-18568226466/RaHHCNvTuLYdEKLNgpZF' }],
-  ]);
+  );
   console.log('Quote email success/failure and WhatsApp checks passed (mocked transport).');
 } finally {
   await browser.close();

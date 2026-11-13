@@ -33,6 +33,14 @@ for (const path of routes) {
   assert(googleTag[0].hasAttribute('async'));
   const initialization = document.querySelector('#google-tag-init')?.textContent;
   assert(initialization, `Google tag initialization: ${path}`);
+  assert(initialization.includes("gtag('config', 'G-3B3ZY6JK8E')"), `GA4 config: ${path}`);
+  assert.equal(
+    document.querySelectorAll(
+      'script[src="https://www.googletagmanager.com/gtag/js?id=G-3B3ZY6JK8E"]',
+    ).length,
+    1,
+    `GA4 loader: ${path}`,
+  );
   const tagHash = createHash('sha256').update(initialization).digest('base64');
   assert(apache.includes(`'sha256-${tagHash}'`), `Google tag CSP hash: ${path}`);
   const clarityScripts = document.querySelectorAll('head script#clarity-init');
