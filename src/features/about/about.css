@@ -405,3 +405,37 @@
     scroll-behavior: auto;
   }
 }
+.about-award {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.about-award figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+}
+.about-award figcaption {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.about-award h2 + p,
+.about-award p + p {
+  margin-top: 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+.about-award .about-text-link {
+  margin-top: 18px;
+}
+@media (max-width: 600px) {
+  .about-award {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}

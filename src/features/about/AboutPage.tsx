@@ -122,6 +122,46 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
+        <section
+          className="about-section about-container about-award"
+          aria-labelledby="award-title"
+        >
+          <figure>
+            <img
+              src="/media/premio-abc-2023-equipe.webp"
+              srcSet="/media/premio-abc-2023-equipe-480.webp 480w, /media/premio-abc-2023-equipe.webp 828w"
+              sizes="(max-width: 600px) calc(100vw - 40px), 50vw"
+              width="828"
+              height="552"
+              loading="lazy"
+              decoding="async"
+              alt="Equipe da agência WB.P reunida com o troféu de bronze do Prêmio ABC 2023"
+            />
+            <figcaption>Uma conquista em equipe na agência WB.P (Webfoco + Pippe).</figcaption>
+          </figure>
+          <div>
+            <p className="about-eyebrow">Reconhecimento · Prêmio ABC 2023</p>
+            <h2 id="award-title">Bronze em desenvolvimento web.</h2>
+            <p>
+              Na agência WB.P, participei de um projeto de SEO e otimização de site que conquistou o
+              bronze em Melhor Desenvolvimento Web no Prêmio ABC 2023, com destaque para a
+              experiência de uso e a navegação rápida.
+            </p>
+            <p>
+              Atuei no desenvolvimento e na otimização, ao lado de Paloma Montenegro no design e
+              Carla Suzano na gestão do projeto. Um reconhecimento ao cuidado de toda a equipe com a
+              qualidade do site.
+            </p>
+            <a
+              className="about-text-link"
+              href="https://www.linkedin.com/feed/update/urn:li:activity:7140102796216893440/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver a publicação sobre o prêmio <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </div>
+        </section>
         <section className="about-section about-container" aria-labelledby="approach-title">
           <p className="about-eyebrow">Como essa experiência ajuda o seu projeto</p>
           <h2 id="approach-title">
@@ -288,9 +328,9 @@ export default function AboutPage() {
                 Um espaço para experimentar prompts, consumo de APIs e a conexão entre a interface e
                 o processamento dos dados.
               </p>
-                <a href="https://oraculoneural.com.br/" target="_blank" rel="noopener noreferrer">
-                  Visitar o Oráculo Neural <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
+              <a href="https://oraculoneural.com.br/" target="_blank" rel="noopener noreferrer">
+                Visitar o Oráculo Neural <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
             </article>
           </div>
         </section>

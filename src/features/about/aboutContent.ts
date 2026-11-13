@@ -14,7 +14,7 @@ export const experiences = [
     tags: ['Angular', 'TypeScript', 'APIs', 'SEO técnico', 'IA'],
   },
   {
-    company: 'Webfoco+Pippe',
+    company: 'WB.P · Webfoco + Pippe',
     period: 'Setembro de 2022 — dezembro de 2024',
     role: 'Desenvolvimento web e integrações',
     summary:
@@ -23,6 +23,7 @@ export const experiences = [
       'Desenvolvimento e manutenção de sites institucionais e e-commerces com WordPress e PHP.',
       'Integrações via APIs REST e melhorias em sistemas de conteúdo e captação de leads.',
       'Ajustes de desempenho, SEO técnico e Core Web Vitals, além de correções e evolução dos projetos.',
+      'Participação no projeto de SEO e otimização de site premiado com bronze em Melhor Desenvolvimento Web no Prêmio ABC 2023.',
     ],
     tags: ['WordPress', 'PHP', 'E-commerce', 'Integrações'],
   },
