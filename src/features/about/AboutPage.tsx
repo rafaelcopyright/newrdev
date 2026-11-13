@@ -288,9 +288,9 @@ export default function AboutPage() {
                 Um espaço para experimentar prompts, consumo de APIs e a conexão entre a interface e
                 o processamento dos dados.
               </p>
-              <Link to="/portfolio-de-sites/">
-                Explorar o portfólio <ArrowUpRight size={16} aria-hidden="true" />
-              </Link>
+                <a href="https://oraculoneural.com.br/" target="_blank" rel="noopener noreferrer">
+                  Visitar o Oráculo Neural <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
             </article>
           </div>
         </section>
