@@ -26,6 +26,14 @@ for (const { path } of legacy) assert(routes.includes(path), `Missing legacy URL
 for (const path of routes) {
   const html = await readFile(`dist${path}index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
+  const openaiScripts = document.querySelectorAll('head script#openai-pixel-init');
+  assert.equal(openaiScripts.length, 1, `OpenAI Pixel initialization: ${path}`);
+  const openaiInitialization = openaiScripts[0].textContent;
+  assert(openaiInitialization.includes('Fua1tdX5eJoJ62PeaPBfeL'));
+  assert(openaiInitialization.includes('https://bzrcdn.openai.com/sdk/oaiq.min.js'));
+  const openaiHash = createHash('sha256').update(openaiInitialization).digest('base64');
+  assert(apache.includes(`'sha256-${openaiHash}'`), `OpenAI Pixel CSP hash: ${path}`);
+  assert(apache.includes('https://bzr.openai.com'));
   const googleTag = document.querySelectorAll(
     'head script[src="https://www.googletagmanager.com/gtm.js?id=GTM-5VP68DMK"]',
   );

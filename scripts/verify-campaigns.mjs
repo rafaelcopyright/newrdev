@@ -42,6 +42,8 @@ try {
       assert.equal((await page.goto(origin + path)).status(), 200);
       await page.evaluate(() => {
         window.campaignAnalytics = [];
+        window.openaiConversions = [];
+        window.oaiq = (...args) => window.openaiConversions.push(args);
         window.gtag = (...args) => window.campaignAnalytics.push(args);
       });
       await expect(page.locator('h1')).toHaveCount(1);
@@ -113,6 +115,11 @@ try {
         ),
       );
       success = true;
+      assert.deepEqual(
+        await page.evaluate(() => window.openaiConversions),
+        [],
+        'OpenAI conversion on failed submission',
+      );
       await page.locator('form').evaluate((form) => {
         form.requestSubmit();
         form.requestSubmit();
@@ -132,6 +139,13 @@ try {
       const leads = analytics.filter((args) => args[1] === 'generate_lead');
       assert.equal(leads.length, 1);
       assert.equal(leads[0][2].landing_campaign, campaign);
+      assert.deepEqual(
+        await page.evaluate(() => window.openaiConversions),
+        campaign === 'sistemas'
+          ? [['measure', 'registration_completed', { type: 'customer_action' }]]
+          : [],
+        'OpenAI conversion must fire once and only for Sistemas',
+      );
       assert(!JSON.stringify(events).includes('teste@example.com'));
       assert(!JSON.stringify(analytics).includes('teste@example.com'));
       await page.locator('details summary').first().click();

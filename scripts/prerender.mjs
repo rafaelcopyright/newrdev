@@ -27,6 +27,9 @@ const clarityInit = template.match(
 )?.[1];
 if (!clarityInit) throw new Error('Clarity initialization script is missing.');
 const clarityHash = createHash('sha256').update(clarityInit).digest('base64');
+const openaiPixelInit = template.match(/<script id="openai-pixel-init">([\s\S]*?)<\/script>/)?.[1];
+if (!openaiPixelInit) throw new Error('OpenAI Pixel initialization script is missing.');
+const openaiPixelHash = createHash('sha256').update(openaiPixelInit).digest('base64');
 for (const path of [...routes, '/404/']) {
   const { html, head } = await render(path);
   const output = template.replace('<!--seo-head-->', head).replace('<!--app-html-->', html);
@@ -92,6 +95,7 @@ await writeFile(
   base
     .replace('#google-tag-hash', `sha256-${googleTagHash}`)
     .replace('#clarity-hash', `sha256-${clarityHash}`)
+    .replace('#openai-pixel-hash', `sha256-${openaiPixelHash}`)
     .replace('# migration-redirects', redirectRules + '\n' + queryRules)
     .replace('# canonical-redirects', canonicalRedirects)
     .replace('# environment-headers', indexingHeader),
