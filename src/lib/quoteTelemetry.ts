@@ -1,4 +1,5 @@
 import { reportAnalyticsEvent } from './analytics';
+import type { CampaignId } from '@/features/campaigns/campaigns';
 
 export type QuoteEvent =
   | 'quote_view'
@@ -10,7 +11,8 @@ export type QuoteEvent =
   | 'quote_validation_error'
   | 'quote_submit_success'
   | 'quote_submit_error'
-  | 'quote_whatsapp_click';
+  | 'quote_whatsapp_click'
+  | 'quote_contact_click';
 
 type QuoteContext = {
   project?: string;
@@ -18,6 +20,8 @@ type QuoteContext = {
   reason?: string;
   status?: number;
   request_id?: string;
+  campaign?: CampaignId;
+  position?: string;
 };
 
 type TelemetryWindow = Window & {
@@ -53,10 +57,12 @@ export function getQuoteSessionId(): string {
 
 // Only machine-defined metadata belongs here. Never pass values, labels, URLs or error messages.
 export function reportQuoteEvent(event: QuoteEvent, context: QuoteContext = {}): void {
-  const parameters: Record<string, string | number> = { form_name: 'orcamento' };
-  for (const key of ['project', 'field', 'reason', 'status'] as const) {
+  const parameters: Record<string, string | number> = {
+    form_name: context.campaign ? `campanha_${context.campaign}` : 'orcamento',
+  };
+  for (const key of ['project', 'field', 'reason', 'status', 'campaign', 'position'] as const) {
     const value = context[key];
-    if (value !== undefined) parameters[key] = value;
+    if (value !== undefined) parameters[key === 'campaign' ? 'landing_campaign' : key] = value;
   }
   // Session/request IDs and field values stay out of GA4.
   reportAnalyticsEvent(event, parameters);
@@ -73,7 +79,7 @@ export function reportQuoteEvent(event: QuoteEvent, context: QuoteContext = {}):
   try {
     const client = window as TelemetryWindow;
     client.clarity?.('event', event);
-    for (const key of ['project', 'field', 'reason'] as const) {
+    for (const key of ['project', 'field', 'reason', 'campaign', 'position'] as const) {
       if (context[key]) client.clarity?.('set', `quote_${key}`, context[key]);
     }
     if (context.status) client.clarity?.('set', 'quote_http_status', String(context.status));

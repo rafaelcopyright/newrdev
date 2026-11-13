@@ -35,6 +35,7 @@ $data = json_decode($raw, true);
 if (is_array($data)) {
     if (quote_valid_id($data['request_id'] ?? null)) $logContext['request_id'] = $data['request_id'];
     if (quote_valid_id($data['session_id'] ?? null)) $logContext['session_id'] = $data['session_id'];
+    if (in_array($data['campaign'] ?? null, ['sites', 'sistemas'], true)) $logContext['campaign'] = $data['campaign'];
 }
 if (!is_array($data) || !isset($data['website']) || $data['website'] !== '') respond(422, false, 'payload_or_honeypot');
 $email = $data['email'] ?? null;

@@ -29,7 +29,14 @@ try {
       (since && Date.parse(record.time) < Date.parse(since))
     )
       continue;
-    const key = [record.event, record.field, record.reason, record.status]
+    const key = [
+      record.campaign,
+      record.event,
+      record.position,
+      record.field,
+      record.reason,
+      record.status,
+    ]
       .filter(Boolean)
       .join(' / ');
     const group = groups.get(key) || { eventos: 0, sessions: new Set(), requests: new Set() };

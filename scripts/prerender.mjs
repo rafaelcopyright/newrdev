@@ -1,6 +1,6 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { render, siteConfig } from '../dist-ssr/entry-server.js';
+import { render, siteConfig, campaigns } from '../dist-ssr/entry-server.js';
 
 const origin = siteConfig.origin;
 const { entries, archives } = JSON.parse(await readFile('src/content/index.json', 'utf8'));
@@ -13,6 +13,7 @@ const routes = [
     '/blog/',
     '/portfolio-de-sites/',
     '/orcamento/',
+    ...Object.values(campaigns).map((campaign) => campaign.path),
     ...entries.map((entry) => entry.path),
     ...archives.map((entry) => entry.path),
   ]),
@@ -51,6 +52,7 @@ for (const group of groups) {
       ? routes.filter(
           (path) =>
             ['/', '/blog/', '/orcamento/', '/portfolio-de-sites/'].includes(path) ||
+            Object.values(campaigns).some((campaign) => campaign.path === path) ||
             entries.some((entry) => entry.kind === 'page' && entry.path === path),
         )
       : ['category', 'post_tag'].includes(group)

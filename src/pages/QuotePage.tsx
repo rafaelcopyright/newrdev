@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { reportQuoteConversion } from '../lib/analytics';
-import { createQuoteId, getQuoteSessionId, reportQuoteEvent } from '../lib/quoteTelemetry';
+import { reportQuoteEvent } from '../lib/quoteTelemetry';
+import { submitQuote } from '../lib/submitQuote';
 import { useQuoteDiagnostics } from '../lib/useQuoteDiagnostics';
 import {
   ArrowRight,
@@ -300,13 +300,9 @@ export default function QuotePage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!selected || sending) return;
+    if (!selected || !projectSlug || sending) return;
     setSending(true);
     setError('');
-    const requestId = createQuoteId();
-    let status: number | undefined;
-    let failure = 'network';
-    reportQuoteEvent('quote_submit_attempt', { project: projectSlug, request_id: requestId });
     const fields = [
       ...commonFields,
       { name: 'company', label: 'Empresa' },
@@ -314,46 +310,16 @@ export default function QuotePage() {
       { name: 'message', label: 'Mensagem' },
     ];
     try {
-      const response = await fetch('/api/orcamento.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project: selected,
-          session_id: getQuoteSessionId(),
-          request_id: requestId,
-          email: form.email,
-          website: new FormData(e.currentTarget).get('website'),
-          details: fields.map(({ name, label }) => ({ label, value: form[name] ?? '' })),
-        }),
-        signal: AbortSignal.timeout(20000),
-      });
-      status = response.status;
-      if (!response.ok) {
-        failure = 'http';
-        throw new Error('Falha HTTP');
-      }
-      failure = 'invalid_response';
-      const result: { success?: boolean } = await response.json();
-      if (result?.success !== true) {
-        failure = 'rejected';
-        throw new Error('Falha no envio');
-      }
-      reportQuoteEvent('quote_submit_success', {
-        project: projectSlug,
-        request_id: requestId,
-        status,
+      await submitQuote({
+        project: selected,
+        projectSlug,
+        email: form.email,
+        website: new FormData(e.currentTarget).get('website'),
+        details: fields.map(({ name, label }) => ({ label, value: form[name] ?? '' })),
       });
       setSubmitted(true);
-      reportQuoteConversion();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (cause) {
-      reportQuoteEvent('quote_submit_error', {
-        project: projectSlug,
-        request_id: requestId,
-        status,
-        reason:
-          cause instanceof DOMException && cause.name === 'TimeoutError' ? 'timeout' : failure,
-      });
+    } catch {
       setError(
         'Não foi possível confirmar o envio. Tente novamente ou entre em contato pelo contato@rafaeldev.com.br.',
       );

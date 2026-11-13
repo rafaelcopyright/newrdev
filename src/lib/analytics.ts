@@ -17,8 +17,12 @@ export function reportAnalyticsEvent(event: string, parameters: EventParameters 
   }
 }
 
-export function reportQuoteConversion(): void {
-  reportAnalyticsEvent('generate_lead', { form_name: 'orcamento', method: 'email' });
+export function reportQuoteConversion(campaign?: string): void {
+  reportAnalyticsEvent('generate_lead', {
+    form_name: campaign ? `campanha_${campaign}` : 'orcamento',
+    method: 'email',
+    ...(campaign ? { landing_campaign: campaign } : {}),
+  });
   try {
     (window as AnalyticsWindow).gtag?.('event', 'conversion', {
       send_to: 'AW-18568226466/ZkgtCPGrgLYdEKLNgpZF',

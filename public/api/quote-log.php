@@ -8,7 +8,7 @@ function quote_log(string $event, array $context = []): void {
         'event' => $event,
         'environment' => ($_SERVER['HTTP_HOST'] ?? '') === 'rafaeldev.com.br' ? 'producao' : 'homologacao',
     ];
-    foreach (['source', 'session_id', 'request_id', 'project', 'field', 'reason', 'status'] as $key) {
+    foreach (['source', 'session_id', 'request_id', 'project', 'field', 'reason', 'status', 'campaign', 'position'] as $key) {
         if (isset($context[$key])) $record[$key] = $context[$key];
     }
     // An unavailable diagnostic log must not corrupt a JSON response or prevent delivery.

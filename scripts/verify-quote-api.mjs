@@ -93,8 +93,15 @@ try {
     }
   }
   assert(ready, `PHP failed to start. Set PHP_BIN to a PHP executable. ${startupError}`);
-  const event = { event: 'quote_form_start', session_id, project: 'consultoria' };
+  const event = {
+    event: 'quote_form_start',
+    session_id,
+    project: 'consultoria',
+    campaign: 'sites',
+    position: 'contact',
+  };
   assert.equal((await post('quote-events.php', event)).status, 204);
+  assert.equal((await post('quote-events.php', { ...event, campaign: 'arbitraria' })).status, 422);
   assert.equal(
     (await post('quote-events.php', { ...event, email: 'secret@example.com' })).status,
     422,
@@ -110,6 +117,7 @@ try {
   for (let i = 1; i < 300; i++) assert.equal((await post('quote-events.php', event)).status, 204);
   assert.equal((await post('quote-events.php', event)).status, 429);
   const payload = {
+    campaign: 'sites',
     session_id,
     request_id,
     project: 'Consultoria',
@@ -131,6 +139,7 @@ try {
   const content = await readFile(log, 'utf8');
   assert(content.includes('mail_accepted') && content.includes('mail_failed'));
   assert(content.includes(request_id) && content.includes(session_id));
+  assert(content.includes('"campaign":"sites"'));
   assert(!content.includes('secret@example.com') && !content.includes('Dado privado'));
   assert(!content.includes('127.0.0.1'));
   console.log(

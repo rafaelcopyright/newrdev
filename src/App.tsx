@@ -10,9 +10,14 @@ import BlogPage from '@/features/content/BlogPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Seo from '@/features/seo/Seo';
 import { entries, archives } from '@/data';
+import CampaignLandingPage from '@/features/campaigns/CampaignLandingPage';
+import { campaigns } from '@/features/campaigns/campaigns';
 
 export default function App() {
   const { pathname } = useLocation();
+  const isCampaign = Object.values(campaigns).some(
+    (campaign) => campaign.path === pathname.replace(/\/?$/, '/'),
+  );
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname]);
@@ -21,9 +26,16 @@ export default function App() {
       <a href="#conteudo" className="skip-link">
         Pular para o conteúdo
       </a>
-      <Header />
+      {!isCampaign && <Header />}
       <main id="conteudo" key={pathname}>
         <Routes>
+          {Object.values(campaigns).map((campaign) => (
+            <Route
+              key={campaign.id}
+              path={campaign.path}
+              element={<CampaignLandingPage campaign={campaign} />}
+            />
+          ))}
           <Route
             path="/"
             element={
@@ -86,7 +98,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
+      {!isCampaign && <Footer />}
     </div>
   );
 }

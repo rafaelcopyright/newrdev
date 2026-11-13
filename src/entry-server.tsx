@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router-dom';
 import { HelmetProvider, type HelmetServerState } from 'react-helmet-async';
 import App from './App';
 export { siteConfig } from './config/site';
+export { campaigns } from './features/campaigns/campaigns';
 
 export function render(path: string): Promise<{ html: string; head: string }> {
   const context: { helmet?: HelmetServerState } = {};

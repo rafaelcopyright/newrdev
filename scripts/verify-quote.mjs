@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { chromium, expect } from '@playwright/test';
 /* global window */
+const origin = process.env.PREVIEW_URL || 'http://127.0.0.1:4173';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
@@ -20,7 +21,7 @@ try {
       ['sistema', 'Sistema', 'Usuários simultâneos estimados'],
       ['consultoria', 'Consultoria', 'Área de foco'],
     ]) {
-      await page.goto(`http://127.0.0.1:4173/orcamento/?projeto=${slug}&utm_source=teste`);
+      await page.goto(`${origin}/orcamento/?projeto=${slug}&utm_source=teste`);
       await expect(page.getByRole('button', { name: new RegExp(type) })).toHaveAttribute(
         'aria-pressed',
         'true',
@@ -36,11 +37,11 @@ try {
     }
   }
   for (const query of ['', '?projeto=invalido', '?utm_source=teste']) {
-    await page.goto('http://127.0.0.1:4173/orcamento/' + query);
+    await page.goto(origin + '/orcamento/' + query);
     await expect(page.locator('form')).toHaveCount(0);
   }
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('http://127.0.0.1:4173/orcamento/');
+  await page.goto(origin + '/orcamento/');
   await page.getByRole('button', { name: /Site Simples/ }).click();
   await page.getByLabel(/^Nome/).fill('Cliente Teste');
   await page.getByLabel('Email', { exact: false }).fill('cliente@example.com');

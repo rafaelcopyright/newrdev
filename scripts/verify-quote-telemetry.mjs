@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { chromium, expect } from '@playwright/test';
 /* global window */
 
+const origin = process.env.PREVIEW_URL || 'http://127.0.0.1:4173';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   for (const width of [390, 1440]) {
@@ -32,7 +33,7 @@ try {
     });
     const count = (event) => events.filter((item) => item.event === event).length;
     const submit = page.getByRole('button', { name: 'Solicitar orçamento', exact: true });
-    await page.goto('http://127.0.0.1:4173/orcamento/');
+    await page.goto(origin + '/orcamento/');
     await page.evaluate(() => {
       window.auditAnalytics = [];
       window.gtag = (...args) => window.auditAnalytics.push(args);
@@ -121,7 +122,7 @@ try {
     });
     await page.unroute('**/api/quote-events.php');
     await page.route('**/api/quote-events.php', (route) => route.abort());
-    await page.goto('http://127.0.0.1:4173/orcamento/?projeto=consultoria');
+    await page.goto(origin + '/orcamento/?projeto=consultoria');
     await page.getByLabel(/^Nome/).fill('Teste');
     await page.getByLabel(/^Email/).fill('teste@example.com');
     await submit.click();
