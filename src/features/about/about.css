@@ -414,7 +414,7 @@
 }
 .about-award-photos {
   position: relative;
-  aspect-ratio: 6 / 5;
+  aspect-ratio: 11 / 10;
   margin-block: 20px 28px;
   isolation: isolate;
 }
@@ -424,7 +424,6 @@
   height: auto;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  border: 4px solid var(--bg-elev);
   border-radius: 14px;
   box-shadow: 0 12px 28px #0005;
 }
